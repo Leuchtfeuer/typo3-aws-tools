@@ -1,7 +1,10 @@
 <?php
 
 $GLOBALS['SiteConfiguration']['site_language']['columns']['awstools_cdn_enabled'] = [
-    'label' => 'Enable CDN for this domain',
+    'label' => sprintf(
+        'LLL:EXT:%s/Resources/Private/Language/Database.xlf:site_configuration.awstools_cdn_enabled',
+        \Leuchtfeuer\AwsTools\Constants::EXTENSION_KEY
+    ),
     'onChange' => 'reload',
     'config' => [
         'type' => 'check',
@@ -15,8 +18,11 @@ $GLOBALS['SiteConfiguration']['site_language']['columns']['awstools_cdn_enabled'
     ],
 ];
 
-$GLOBALS['SiteConfiguration']['site_language']['columns']['awstools_cdn_hostname'] = [
-    'label' => 'CDN Hostname (e.g. cdn.site.org)',
+$GLOBALS['SiteConfiguration']['site_language']['columns']['awstools_cdn_host'] = [
+    'label' => sprintf(
+        'LLL:EXT:%s/Resources/Private/Language/Database.xlf:site_configuration.awstools_cdn_host',
+        \Leuchtfeuer\AwsTools\Constants::EXTENSION_KEY
+    ),
     'displayCond' => 'FIELD:awstools_cdn_enabled:=:1',
     'config' => [
         'type' => 'input',
@@ -25,8 +31,11 @@ $GLOBALS['SiteConfiguration']['site_language']['columns']['awstools_cdn_hostname
 ];
 
 $GLOBALS['SiteConfiguration']['site_language']['palettes']['awstools-cdn'] = [
-    'label' => 'Content Delivery Network',
-    'showitem' => 'awstools_cdn_enabled, --linebreak--, awstools_cdn_hostname'
+    'label' => sprintf(
+        'LLL:EXT:%s/Resources/Private/Language/Database.xlf:site_configuration.label',
+        \Leuchtfeuer\AwsTools\Constants::EXTENSION_KEY
+    ),
+    'showitem' => 'awstools_cdn_enabled, --linebreak--, awstools_cdn_host'
 ];
 
 $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem'] = str_replace(

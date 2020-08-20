@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2020-08-20T19:16:59Z" product-name="aws_tools">
+        <header/>
+        <body>
+            <trans-unit id="site_configuration.awstools_cdn_host">
+                <source>CDN Host (incl. Scheme - e.g. https://cdn.site.org)</source>
+            </trans-unit>
+            <trans-unit id="site_configuration.awstools_cdn_enabled">
+                <source>Enable CDN for this domain</source>
+            </trans-unit>
+            <trans-unit id="site_configuration.label">
+                <source>Content Delivery Network</source>
+            </trans-unit>
+
+            <trans-unit id="template.common">
+                <source>AWS Tools</source>
+            </trans-unit>
+            <trans-unit id="template.replace">
+                <source>AWS Tools (CDN Replace Configuration)</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -7,13 +7,19 @@ call_user_func(
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
             $extensionKey,
             'Configuration/TypoScript',
-            'AWS Tools'
+            sprintf(
+                'LLL:EXT:%s/Resources/Private/Language/Database.xlf:template.common',
+                $extensionKey
+            )
         );
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
             $extensionKey,
             'Configuration/TypoScript/ReplaceConfig',
-            'AWS Tools (CDN Replace Configuration)'
+            sprintf(
+                'LLL:EXT:%s/Resources/Private/Language/Database.xlf:template.replace',
+                $extensionKey
+            )
         );
     }, \Leuchtfeuer\AwsTools\Constants::EXTENSION_KEY
 );
