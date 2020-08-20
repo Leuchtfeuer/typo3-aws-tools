@@ -1,6 +1,5 @@
 <?php
 
-// Configure a new simple required input field to site
 $GLOBALS['SiteConfiguration']['site_language']['columns']['awstools_cdn_enabled'] = [
     'label' => 'Enable CDN for this domain',
     'onChange' => 'reload',
@@ -30,7 +29,6 @@ $GLOBALS['SiteConfiguration']['site_language']['palettes']['awstools-cdn'] = [
     'showitem' => 'awstools_cdn_enabled, --linebreak--, awstools_cdn_hostname'
 ];
 
-// And add it to showitem
 $GLOBALS['SiteConfiguration']['site_language']['types']['1']['showitem'] = str_replace(
     'flag,',
     'flag, --palette--;;awstools-cdn,',
