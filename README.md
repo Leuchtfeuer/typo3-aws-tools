@@ -69,7 +69,7 @@ config.tx_awstools {
 The "patterns" option can be extended by any number of additional entries. Each property must have the keys "search" and 
 "replace". The `%s` in the replace property will be replaced by the previously configured CDN domain.
 
-Please note the quotation mark in the values of "search" and "replace". The HTML source code of the page is searched for this 
+**Please note** the quotation mark in the values of "search" and "replace". The HTML source code of the page is searched for this 
 pattern, so that it applies to `href="/typo3temp/assets/...` for example. If the pattern did not include the quotation mark, this 
 would lead to serious errors, as links like `href="https://cdn.example.com/typo3temp/assets/"` would be rewritten to 
 `https://cdn.example.comhttps://cdn.example.com/typo3temp/assets/`.
@@ -81,6 +81,8 @@ you must select the region over which the requests to the AWS servers to invalid
 you can specify a comma-separated list of distributions where your assets are stored.
 
 ![AWS Tools extension configuration](https://raw.githubusercontent.com/Leuchtfeuer/typo3-aws-tools/master/Documentation/Images/extension-configuration.png "AWS Tools extension configuration")
+
+**Please note** that all entries are always invalidated simultaneously in all configured distributions. 
 
 ## Invalidate Amazon CloudFront Entries
 
@@ -104,8 +106,8 @@ paths can be invalidated.
 
 #### Access Protection
 
-For a user to be able to invalidate Amazon CloudFront entries, she or he must have the appropriate permissions. The permissions 
-can be granted in the backend group or user data record (`invalidateFile` or `invalidateFolder`).
+Appropriate permissions are required so that users can invalidate the Amazon CloudFront entries. The permissions can be granted in 
+the backend group or user data record (`invalidateFile` or `invalidateFolder`).
 
 ![Configure permissions for users or groups](https://raw.githubusercontent.com/Leuchtfeuer/typo3-aws-tools/master/Documentation/Images/user-permissions.png "Configure permissions for users or groups")
 
@@ -113,8 +115,8 @@ Administrators can invalidate the entries without further permissions.
 
 #### Automatic Invalidation on Overwriting
 
-Amazon CloudFront entries will automatic being invalidated after overwriting an existing file in the file list module - regardless 
-of the authorizations of the user.
+Amazon CloudFront entries will be invalidated automatically after overwriting an existing file in the file list module - 
+regardless of the authorizations of the user.
 
 ### Backend Module
 
