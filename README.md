@@ -1,8 +1,8 @@
 Amazon Web Services Tools for TYPO3
 ===================================
 [![Latest Stable Version](https://poser.pugx.org/leuchtfeuer/aws-tools/v/stable)](https://packagist.org/packages/leuchtfeuer/aws-tools)
-[![Total Downloads](https://poser.pugx.org/leuchtfeuer/aws-tools/downloads)](https://packagist.org/leuchtfeuer/aws-tools)
-[![Latest Unstable Version](https://poser.pugx.org/leuchtfeuer/aws-tools/v/unstable)](https://packagist.org/leuchtfeuer/aws-tools)
+[![Total Downloads](https://poser.pugx.org/leuchtfeuer/aws-tools/downloads)](https://packagist.org/packages/leuchtfeuer/aws-tools)
+[![Latest Unstable Version](https://poser.pugx.org/leuchtfeuer/aws-tools/v/unstable)](https://packagist.org/packages/leuchtfeuer/aws-tools)
 [![Code Climate](https://codeclimate.com/github/Leuchtfeuer/typo3-aws-tools/badges/gpa.svg)](https://codeclimate.com/github/Leuchtfeuer/typo3-aws-tools)
 [![License](https://poser.pugx.org/leuchtfeuer/aws-tools/license)](https://packagist.org/packages/leuchtfeuer/aws-tools)
 
