@@ -16,3 +16,14 @@ All Changes
 ===========
 
 This is a list of all changes in this release::
+
+   2020-08-20 [TASK] Add further language labels (Commit 3a059c5 by Florian Wessels)
+   2020-08-20 [TASK] Rename configuration variable (Commit 061c1a3 by Florian Wessels)
+   2020-08-20 [TASK] Remove test related properties from composer.json (Commit 3825b52 by Florian Wessels)
+   2020-08-20 [TASK] Update title and description of this extension (Commit abe2448 by Florian Wessels)
+   2020-08-20 [TASK] Apply CS (Commit 9cde82f by Florian Wessels)
+   2020-08-20 [DOC] Adapt wording (Commit 9bbbd8a by Florian Wessels)
+   2020-08-20 [BUGFIX] Use proper links to packagist.org (Commit e15110c by Florian Wessels)
+   2020-08-20 [TASK] Remove obsolete comments (Commit 17f9579 by Florian Wessels)
+   2020-08-20 [DOC] Add documentation (Commit 6e92e5c by Florian Wessels)
+   2020-08-20 Initial commit (Commit 1571d32 by Florian Wessels)
