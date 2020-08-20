@@ -20,16 +20,16 @@ class CdnEventListener implements SingletonInterface
 {
     protected $responsible = false;
 
-    protected $publicUrlPrefix = '';
+    protected $host = '';
 
     public function __construct(EnvironmentService $environmentService)
     {
         if ($environmentService->isEnvironmentInFrontendMode()) {
             $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->toArray();
-            $this->responsible = $language['awstools_cdn_enabled'] === true && !empty($language['awstools_cdn_hostname']);
+            $this->responsible = $language['awstools_cdn_enabled'] === true && !empty($language['awstools_cdn_host']);
 
             if ($this->responsible) {
-                $this->publicUrlPrefix = $language['awstools_cdn_hostname'];
+                $this->host = $language['awstools_cdn_host'];
             }
         }
     }
@@ -46,7 +46,7 @@ class CdnEventListener implements SingletonInterface
         if ($driver instanceof AbstractHierarchicalFilesystemDriver && $resource instanceof FileInterface) {
             try {
                 $publicUrl = $driver->getPublicUrl($resource->getIdentifier());
-                $event->setPublicUrl($this->publicUrlPrefix . $publicUrl);
+                $event->setPublicUrl($this->host . $publicUrl);
             } catch (Exception $exception) {
                 // Do nothing.
             }
