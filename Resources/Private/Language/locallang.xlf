@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2020-08-18T19:13:12Z" product-name="aws_tools">
+        <header/>
+        <body>
+            <trans-unit id="module_title">
+                <source>Amazon CloudFront Manager</source>
+            </trans-unit>
+            <trans-unit id="messages.cloudfront_client_error.body">
+                <source>The following error occurred while connecting to the Amazon CloudFront service: "%s"</source>
+            </trans-unit>
+            <trans-unit id="messages.cloudfront_client_error.title">
+                <source>Error for distribution "%s"</source>
+            </trans-unit>
+            <trans-unit id="messages.cloudfront_invalidation_success.body">
+                <source>The path(s) "%s" was/were successfully marked for removal from the Amazon CloudFront (Distribution "%s").</source>
+            </trans-unit>
+            <trans-unit id="messages.cloudfront_invalidation_success.title">
+                <source>Invalidation successfully initialized</source>
+            </trans-unit>
+            <trans-unit id="messages.invalid_resource_path.body">
+                <source>The path "%s" is an invalid resource path. Please use the file path as displayed in the web browser.</source>
+            </trans-unit>
+            <trans-unit id="messages.invalid_resource_path.title">
+                <source>Invalid file path</source>
+            </trans-unit>
+            <trans-unit id="content.invalidation_id">
+                <source>Invalidation ID</source>
+            </trans-unit>
+            <trans-unit id="content.create_time">
+                <source>Create Time</source>
+            </trans-unit>
+            <trans-unit id="content.status">
+                <source>Status</source>
+            </trans-unit>
+            <trans-unit id="content.date_format">
+                <source>m/d/Y g:ia</source>
+            </trans-unit>
+            <trans-unit id="content.invalidate_submit">
+                <source>Invalidate Entries</source>
+            </trans-unit>
+            <trans-unit id="content.invalidate_help">
+                <source><![CDATA[Enter paths to assets to delete from Amazon CloudFront. One path per line, only the path (as displayed in the web browser), without leading domain.<br><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects-paths" target="_blank">Learn more about invalidation paths.</a>]]></source>
+            </trans-unit>
+            <trans-unit id="content.invalidate_footer">
+                <source>Invalidations will be created in all distributions.</source>
+            </trans-unit>
+            <trans-unit id="InvalidClientTokenId">
+                <source>Invalid Client Token ID</source>
+            </trans-unit>
+            <trans-unit id="file_permissions.invalidate_file">
+                <source>Files: Invalidate (Amazon CloudFront)</source>
+            </trans-unit>
+            <trans-unit id="file_permissions.invalidate_folder">
+                <source>Directory: Invalidate (Amazon CloudFront)</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

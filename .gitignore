@@ -1,0 +1,6 @@
+/.Build/
+/composer.lock
+.php_cs.cache
+.idea
+.DS_Store
+._*

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" date="2020-08-18T17:52:29Z" product-name="aws_tools">
+        <header/>
+        <body>
+            <trans-unit id="mlang_tabs_tab">
+                <source>Amazon Web Services</source>
+            </trans-unit>
+            <trans-unit id="mlang_labels_tabdescr">
+                <source>Invalidate Amazon CloudFront entries.</source>
+            </trans-unit>
+            <trans-unit id="mlang_labels_tablabel">
+                <source>Invalidate Amazon CloudFront entries.</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,42 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  client.cloudfront:
+    class: Aws\CloudFront\CloudFrontClient
+    factory: ['Leuchtfeuer\AwsTools\Factory\CloudFrontFactory', 'getClient']
+
+  Leuchtfeuer\AwsTools\:
+    resource: '../Classes/*'
+
+  Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository:
+    arguments:
+      $cloudFrontClient: '@client.cloudfront'
+
+  Leuchtfeuer\AwsTools\Command\InvalidationCommand:
+    tags:
+      - name: console.command
+        command: aws:cf:invalidate
+        schedulable: false
+
+  Leuchtfeuer\AwsTools\EventListener\CdnEventListener:
+    tags:
+      - name: event.listener
+        identifier: sdl.generatePublicUrlForResource
+        method: onResourceStorageEmitPreGeneratePublicUrlSignal
+        event: TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent
+
+  Leuchtfeuer\AwsTools\EventListener\FileInvalidationEventListener:
+    tags:
+      - name: event.listener
+        identifier: awstools.preFileAdd
+        method: invalidateOnBackendUploadReplace
+        event: TYPO3\CMS\Core\Resource\Event\BeforeFileReplacedEvent
+      - name: event.listener
+        identifier: awstools.postFileSetContents
+        method: invalidateFile
+        event: TYPO3\CMS\Core\Resource\Event\AfterFileContentsSetEvent
+
+

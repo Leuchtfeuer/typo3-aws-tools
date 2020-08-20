@@ -1,0 +1,18 @@
+module.tx_awstools {
+    view {
+        layoutRootPaths {
+            0 = EXT:aws_tools/Resources/Private/Layouts/
+            1 = {$module.tx_awstools.view.layoutRootPath}
+        }
+
+        templateRootPaths {
+            0 = EXT:aws_tools/Resources/Private/Templates/
+            1 = {$module.tx_awstools.view.templateRootPath}
+        }
+
+        partialRootPaths {
+            0 = EXT:aws_tools/Resources/Private/Partials/
+            1 = {$module.tx_awstools.view.partialRootPath}
+        }
+    }
+}

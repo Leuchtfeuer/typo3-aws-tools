@@ -1,0 +1,53 @@
+{
+    "name": "leuchtfeuer/aws-tools",
+    "description": "AWS related stuff",
+    "keywords": [
+        "AWS",
+        "CloudFront",
+        "CDN",
+        "TYPO3"
+    ],
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.Leuchtfeuer.com",
+    "authors": [
+        {
+            "name": "Florian Wessels",
+            "email": "f.wessels@Leuchtfeuer.com",
+            "role": "Developer",
+            "homepage": "https://www.Leuchtfeuer.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Leuchtfeuer\\AwsTools\\": "Classes/"
+        }
+    },
+    "require": {
+        "aws/aws-sdk-php": "^3.149",
+        "typo3/cms-backend": "^10.4.6",
+        "typo3/cms-core": "^10.4.6",
+        "typo3/cms-extbase": "^10.4.6"
+    },
+    "replace": {
+        "typo3-ter/aws-tools": "self.version"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare",
+            "mkdir -p .Build/web/typo3conf/ext/",
+            "[ -L .Build/web/typo3conf/ext/aws_tools ] || ln -snvf ../../../../. .Build/web/typo3conf/ext/aws_tools"
+        ]
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/web",
+            "extension-key": "aws_tools"
+        }
+    }
+}

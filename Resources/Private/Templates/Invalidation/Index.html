@@ -1,0 +1,53 @@
+<f:layout name="Backend"/>
+
+<f:section name="main">
+	<div class="row">
+		<div class="col-sm-12">
+			<h1>
+				<f:translate key="module_title"/>
+			</h1>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">{f:translate(key: 'content.invalidate_help') -> f:format.raw()}</div>
+	</div>
+
+	<hr>
+
+	<f:form action="invalidate" class="row">
+		<div class="col-sm-12">
+			<div class="form-group">
+				<f:form.textarea name="resourcePaths" rows="10" class="form-control"/>
+			</div>
+			<div class="form-group">
+				<p>
+					<f:translate key="content.invalidate_footer"/>
+				</p>
+				<f:form.button class="btn btn-warning">{f:translate(key: 'content.invalidate_submit')}</f:form.button>
+			</div>
+		</div>
+	</f:form>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<h2>Distributions</h2>
+		</div>
+	</div>
+
+	<f:for each="{distributions}" as="distribution" key="name">
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>{name}</h3>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-12">
+				<f:if condition="{distribution.Quantity} > 0">
+					<f:render partial="Invalidation/Table" arguments="{distribution: distribution}"/>
+				</f:if>
+			</div>
+		</div>
+	</f:for>
+</f:section>

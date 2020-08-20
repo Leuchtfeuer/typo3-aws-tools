@@ -1,0 +1,12 @@
+module.tx_awstools {
+    view {
+        # cat=module.tx_tx_awstools/file; type=string; label=Path to template root (BE)
+        templateRootPath = EXT:aws_tools/Resources/Private/Backend/Templates/
+
+        # cat=module.tx_tx_awstools/file; type=string; label=Path to template partials (BE)
+        partialRootPath = EXT:aws_tools/Resources/Private/Backend/Partials/
+
+        # cat=module.tx_tx_awstools/file; type=string; label=Path to template layouts (BE)
+        layoutRootPath = EXT:aws_tools/Resources/Private/Backend/Layouts/
+    }
+}

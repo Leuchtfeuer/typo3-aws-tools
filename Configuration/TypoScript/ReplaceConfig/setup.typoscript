@@ -1,0 +1,13 @@
+config.tx_awstools {
+    patterns {
+        10 {
+            search = "/typo3temp/
+            replace = "%s/typo3temp/
+        }
+
+        20 {
+            search = "/typo3conf/
+            replace = "%s/typo3conf/
+        }
+    }
+}
