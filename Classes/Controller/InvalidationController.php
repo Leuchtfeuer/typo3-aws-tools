@@ -27,13 +27,13 @@ class InvalidationController extends ActionController
     protected $view;
 
     protected $defaultViewObjectName = BackendTemplateView::class;
-    protected $distributionIds;
+    protected $distributions;
     protected $cloudFrontRepository;
     protected $exception;
 
     public function __construct(ExtensionConfiguration $extensionConfiguration, CloudFrontRepository $cloudFrontRepository)
     {
-        $this->distributionIds = $extensionConfiguration->getCloudFrontDistributions();
+        $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
         $this->cloudFrontRepository = $cloudFrontRepository;
     }
 
@@ -41,9 +41,9 @@ class InvalidationController extends ActionController
     {
         $distributions = [];
 
-        foreach ($this->distributionIds as $distributionId) {
+        foreach ($this->distributions as $distribution) {
             try {
-                $distributions[$distributionId] = $this->cloudFrontRepository->findInvalidationsByDistribution($distributionId)['InvalidationList'];
+                $distributions[$distribution] = $this->cloudFrontRepository->findInvalidationsByDistribution($distribution)['InvalidationList'];
             } catch (AwsException $exception) {
                 $this->addAwsException($exception, AbstractMessage::WARNING);
             }
@@ -54,27 +54,13 @@ class InvalidationController extends ActionController
 
     public function invalidateAction(string $resourcePaths): void
     {
-        $processedResourcePaths = [];
-
-        foreach (GeneralUtility::trimExplode(LF, $resourcePaths, true) as $path) {
-            if (strpos($path, ' ') === false) {
-                $processedResourcePaths[] = $path;
-            } else {
-                $this->addFlashMessage(
-                    LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]),
-                    LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME),
-                    AbstractMessage::WARNING
-                );
-            }
-        }
-
-        foreach ($this->distributionIds as $distributionId) {
+        foreach ($this->distributions as $distribution) {
             try {
-                $result = $this->cloudFrontRepository->createInvalidation($distributionId, $processedResourcePaths);
+                $result = $this->cloudFrontRepository->createInvalidation($distribution, $this->clearResourcePaths($resourcePaths));
                 $paths = implode(', ', $result['Invalidation']['InvalidationBatch']['Paths']['Items'] ?? []);
 
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($paths), $distributionId]),
+                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($paths), $distribution]),
                     LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME),
                     AbstractMessage::OK
                 );
@@ -97,5 +83,24 @@ class InvalidationController extends ActionController
             $severity,
             $storeInSession
         );
+    }
+
+    protected function clearResourcePaths(string $paths): array
+    {
+        $resourcePaths = [];
+
+        foreach (GeneralUtility::trimExplode(LF, $paths, true) as $path) {
+            if (strpos($path, ' ') === false) {
+                $resourcePaths[] = $path;
+            } else {
+                $this->addFlashMessage(
+                    LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]),
+                    LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME),
+                    AbstractMessage::WARNING
+                );
+            }
+        }
+
+        return $resourcePaths;
     }
 }
