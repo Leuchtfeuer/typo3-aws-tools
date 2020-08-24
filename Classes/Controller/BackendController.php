@@ -92,13 +92,16 @@ class BackendController implements SingletonInterface
      * @param FileInterface|FolderInterface|null $item
      * @param string $type
      * @return bool
-     * @throws AspectNotFoundException
      */
     protected function isPermitted($item, string $type): bool
     {
-        return
-            $item !== null
-            && GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('backend.user', 'isLoggedIn')
-            && $item->getStorage()->checkUserActionPermission('invalidate', $type);
+        try {
+            return
+                $item !== null
+                && GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('backend.user', 'isLoggedIn')
+                && $item->getStorage()->checkUserActionPermission('invalidate', $type);
+        } catch (AspectNotFoundException $exception) {
+            return false;
+        }
     }
 }

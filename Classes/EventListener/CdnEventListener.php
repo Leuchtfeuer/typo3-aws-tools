@@ -11,7 +11,6 @@ namespace Leuchtfeuer\AwsTools\EventListener;
 
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
-use TYPO3\CMS\Core\Resource\Exception;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
@@ -44,12 +43,8 @@ class CdnEventListener implements SingletonInterface
         $resource = $event->getResource();
 
         if ($driver instanceof AbstractHierarchicalFilesystemDriver && $resource instanceof FileInterface) {
-            try {
-                $publicUrl = $driver->getPublicUrl($resource->getIdentifier());
-                $event->setPublicUrl($this->host . $publicUrl);
-            } catch (Exception $exception) {
-                // Do nothing.
-            }
+            $publicUrl = $driver->getPublicUrl($resource->getIdentifier());
+            $event->setPublicUrl($this->host . $publicUrl);
         }
     }
 }

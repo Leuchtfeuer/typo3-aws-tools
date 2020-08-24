@@ -10,6 +10,7 @@
 namespace Leuchtfeuer\AwsTools\Domain\Transfer;
 
 use Leuchtfeuer\AwsTools\Constants;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration as CoreExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -23,7 +24,11 @@ class ExtensionConfiguration implements SingletonInterface
 
     public function __construct()
     {
-        $configuration = GeneralUtility::makeInstance(CoreExtensionConfiguration::class)->get(Constants::EXTENSION_KEY);
+        try {
+            $configuration = GeneralUtility::makeInstance(CoreExtensionConfiguration::class)->get(Constants::EXTENSION_KEY);
+        } catch (ExtensionConfigurationExtensionNotConfiguredException $exception) {
+            $configuration = [];
+        }
 
         if ($configuration) {
             $this->setPropertiesFromConfiguration($configuration);
