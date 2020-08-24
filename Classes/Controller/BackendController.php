@@ -42,10 +42,7 @@ class BackendController implements SingletonInterface
         if ($this->isPermitted($item, $data['type']) && $identifier = $request->getQueryParams()['identifier'] ?? false) {
             try {
                 $distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
-
-                foreach ($distributions as $distribution) {
-                    $this->cloudFrontRepository->createInvalidation($distribution, $identifier);
-                }
+                $this->cloudFrontRepository->createBatchInvalidation($distributions, $identifier);
 
                 return new JsonResponse([
                     'message' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($identifier), implode(', ', $distributions)]),

@@ -52,4 +52,23 @@ class CloudFrontRepository
             ],
         ])->toArray();
     }
+
+    /**
+     * This will create invalidations of an array of file paths (or a single path) in the given distributions.
+     *
+     * @param array $distributions The IDs of the distributions in which the specified item(s) should be invalidated
+     * @param string|string[] $items Array of file paths to be invalidated (or a single path)
+     *
+     * @return array An array of responses of the webservice
+     */
+    public function createBatchInvalidation(array $distributions, $items): array
+    {
+        $responses = [];
+
+        foreach ($distributions as $distribution) {
+            $responses[$distribution] = $this->createInvalidation($distribution, $items);
+        }
+
+        return $responses;
+    }
 }

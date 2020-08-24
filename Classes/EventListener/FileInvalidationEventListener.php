@@ -43,12 +43,10 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
 
     private function invalidatePath($path): void
     {
-        foreach ($this->distributionIds as $distributionId) {
-            try {
-                $this->cloudFrontRepository->createInvalidation($distributionId, $path);
-            } catch (CloudFrontException $exception) {
-                $this->logger->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
-            }
+        try {
+            $this->cloudFrontRepository->createBatchInvalidation($this->distributions, $path);
+        } catch (CloudFrontException $exception) {
+            $this->logger->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
         }
     }
 }
