@@ -39,29 +39,20 @@ class BackendController implements SingletonInterface
         $data = json_decode($request->getBody()->getContents(), true);
         $item = $this->getItem($data);
 
-        if ($this->isPermitted($item, $data['type'])) {
-            if ($identifier = $request->getQueryParams()['identifier'] ?? false) {
+        if ($this->isPermitted($item, $data['type']) && $identifier = $request->getQueryParams()['identifier'] ?? false) {
+            try {
                 $distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
 
-                try {
-                    foreach ($distributions as $distribution) {
-                        $this->cloudFrontRepository->createInvalidation($distribution, $identifier);
-                    }
-
-                    return new JsonResponse([
-                        'message' => LocalizationUtility::translate(
-                            'messages.cloudfront_invalidation_success.body',
-                            Constants::EXTENSION_NAME,
-                            [urldecode($identifier), implode(', ', $distributions)]
-                        ),
-                        'title' => LocalizationUtility::translate(
-                            'messages.cloudfront_invalidation_success.title',
-                            Constants::EXTENSION_NAME
-                        )
-                    ]);
-                } catch (AwsException $exception) {
-                    return new JsonResponse(['message' => $exception->getAwsErrorMessage()], 500);
+                foreach ($distributions as $distribution) {
+                    $this->cloudFrontRepository->createInvalidation($distribution, $identifier);
                 }
+
+                return new JsonResponse([
+                    'message' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($identifier), implode(', ', $distributions)]),
+                    'title' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME)
+                ]);
+            } catch (AwsException $exception) {
+                return new JsonResponse(['message' => $exception->getAwsErrorMessage()], 500);
             }
         }
 

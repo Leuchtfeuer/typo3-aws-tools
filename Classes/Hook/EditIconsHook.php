@@ -43,12 +43,7 @@ class EditIconsHook implements FileListEditIconHookInterface
 
             $attributes = [
                 'href' => (string)GeneralUtility::makeInstance(UriBuilder::class)->buildUriFromRoute('ajax_awstools_invalidate', ['identifier' => $identifier]),
-                'title' => $GLOBALS['LANG']->sL(
-                    sprintf(
-                        'LLL:EXT:%s/Resources/Private/Language/locallang.xlf:messages.invalid_resource_path.title',
-                        Constants::EXTENSION_KEY
-                    )
-                ),
+                'title' => $GLOBALS['LANG']->sL(sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:messages.invalid_resource_path.title', Constants::EXTENSION_KEY)),
                 'data-type' => $type,
                 'data-identifier' => $item->getIdentifier(),
                 'data-storage' => $item->getStorage()->getUid()
