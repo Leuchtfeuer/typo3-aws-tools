@@ -22,6 +22,9 @@ All Changes
 
 This is a list of all changes in this release::
 
+   2020-08-24 [DOC] Add release notes for version 1.0.0 (Commit b679e94 by Florian Wessels)
+   2020-08-24 [DOC] Adapt toctree implementation (Commit 2186fe8 by Florian Wessels)
+   2020-08-24 [BUGFIX][DOC] Use proper tag name (Commit 731a7c8 by Florian Wessels)
    2020-08-24 [FOLLOW-UP][TASK] Unify variables containing distribution ids (Commit 7ec7fc4 by Florian Wessels)
    2020-08-24 [DOC] Introduce php doc (Commit 73bf916 by Florian Wessels)
    2020-08-24 [TASK] Add method to invalidate files in multiple distributions (Commit 1ff1ad0 by Florian Wessels)
