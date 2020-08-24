@@ -37,8 +37,7 @@ experience. Lastly, if you use AWS origins such as Amazon S3, Amazon EC2 or Elas
 transferred between these services and CloudFront.
 
 .. toctree::
-    :maxdepth: 3
-    :hidden:
+   :hidden:
 
-    Contributing/Index
-    Changelog/Index
+   Contributing/Index
+   Changelog/Index

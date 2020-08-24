@@ -44,7 +44,6 @@ You need to download the AWS Tools extension from the
 of your TYPO3 instance and activate the extension afterwards.
 
 .. toctree::
-    :maxdepth: 3
-    :hidden:
+   :hidden:
 
-    Configuration/Index
+   Configuration/Index
