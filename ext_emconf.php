@@ -7,7 +7,7 @@ $EM_CONF[\Leuchtfeuer\AwsTools\Constants::EXTENSION_KEY] = [
     'category' => 'misc',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.6-10.4.99',
+            'typo3' => '10.4.14-10.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],
