@@ -1,0 +1,25 @@
+.. include:: ../../Includes.txt
+
+==========================
+Version 1.0.1 - 2021/03/24
+==========================
+
+This is regular maintenance release. It contains bug fixes only.
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v1.0.1>`__.
+
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+   2021-03-24 [TASK] Raise dependencies (Commit a6484ae by Florian Wessels)
+   2020-09-18 [BUGFIX] Load JS only in BE mode (Commit 14f538d by Florian Wessels)
+   2020-09-18 [TASK] Use unique class names within svg files (Commit 0eba7a2 by Florian Wessels)
+
+
