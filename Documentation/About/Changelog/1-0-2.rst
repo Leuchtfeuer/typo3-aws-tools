@@ -1,0 +1,23 @@
+.. include:: ../../Includes.txt
+
+==========================
+Version 1.0.2 - 2021/06/29
+==========================
+
+This is regular maintenance release. It contains bug fixes only.
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v1.0.2>`__.
+
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+   2021-06-29 [TASK] Cast to bool with default value (Commit 3a9bc53 by Florian Wessels)
+   2021-05-05 [BUGFIX] Use extension key as string (Commit 093e228 by Florian Wessels)
+
