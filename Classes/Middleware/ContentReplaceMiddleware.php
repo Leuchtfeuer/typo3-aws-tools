@@ -22,7 +22,7 @@ class ContentReplaceMiddleware implements MiddlewareInterface
         $language = $request->getAttribute('language')->toArray();
         $response = $handler->handle($request);
 
-        if (filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host'])) {
+        if ((bool)($language['awstools_cdn_enabled'] ?? false) === false || empty($language['awstools_cdn_host'])) {
             return $response;
         }
 
