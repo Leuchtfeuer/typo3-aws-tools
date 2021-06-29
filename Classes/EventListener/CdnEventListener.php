@@ -25,7 +25,7 @@ class CdnEventListener implements SingletonInterface
     {
         if ($environmentService->isEnvironmentInFrontendMode()) {
             $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->toArray();
-            $this->responsible = (bool)($language['awstools_cdn_enabled'] ?? false) === true && !empty($language['awstools_cdn_host']);
+            $this->responsible = filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host']);
 
             if ($this->responsible) {
                 $this->host = $language['awstools_cdn_host'];
