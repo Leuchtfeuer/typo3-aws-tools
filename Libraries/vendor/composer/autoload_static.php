@@ -793,6 +793,7 @@ class ComposerStaticInit62073c192830e67c7d4366344968c4b7
         'Aws\\kendra\\kendraClient' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/kendra/kendraClient.php',
         'Aws\\signer\\Exception\\signerException' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/signer/Exception/signerException.php',
         'Aws\\signer\\signerClient' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/signer/signerClient.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
         'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
         'GuzzleHttp\\Client' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Client.php',

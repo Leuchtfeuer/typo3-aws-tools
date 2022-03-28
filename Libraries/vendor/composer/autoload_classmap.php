@@ -702,6 +702,7 @@ return array(
     'Aws\\kendra\\kendraClient' => $vendorDir . '/aws/aws-sdk-php/src/kendra/kendraClient.php',
     'Aws\\signer\\Exception\\signerException' => $vendorDir . '/aws/aws-sdk-php/src/signer/Exception/signerException.php',
     'Aws\\signer\\signerClient' => $vendorDir . '/aws/aws-sdk-php/src/signer/signerClient.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'DivisionByZeroError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
     'Error' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/Error.php',
     'GuzzleHttp\\Client' => $vendorDir . '/guzzlehttp/guzzle/src/Client.php',
