@@ -9,11 +9,14 @@
 
 namespace Leuchtfeuer\AwsTools\EventListener;
 
+use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
+
 
 class CdnEventListener implements SingletonInterface
 {
@@ -24,7 +27,26 @@ class CdnEventListener implements SingletonInterface
     public function __construct(EnvironmentService $environmentService)
     {
         if ($environmentService->isEnvironmentInFrontendMode()) {
-            $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->toArray();
+            $language = [];
+
+            if (array_key_exists('TYPO3_REQUEST', $GLOBALS)) {
+                $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->toArray();
+            } else {
+                $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
+                $calledBaseUri = GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR');
+                $allSites = $siteConfiguration->getAllExistingSites();
+
+                foreach($allSites as $site) {
+                    $baseUri = (string)$site->getBase();
+
+                    if ($baseUri === $calledBaseUri) {
+                        $languages = $site->getAttribute('languages');
+                        $language = reset($languages);
+                        break;
+                    }
+                }
+            }
+
             $this->responsible = filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host']);
 
             if ($this->responsible) {
