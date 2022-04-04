@@ -7,7 +7,7 @@ $EM_CONF['aws_tools'] = [
     'category' => 'misc',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.26-10.4.99',
+            'typo3' => '11.5.0-11.5.99',
         ],
         'conflicts' => [],
         'suggests' => [],
