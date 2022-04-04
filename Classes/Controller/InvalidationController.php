@@ -13,7 +13,8 @@ use Aws\Exception\AwsException;
 use Leuchtfeuer\AwsTools\Constants;
 use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
-use TYPO3\CMS\Backend\View\BackendTemplateView;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -21,23 +22,24 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class InvalidationController extends ActionController
 {
-    /**
-     * @var BackendTemplateView
-     */
-    protected $view;
 
-    protected $defaultViewObjectName = BackendTemplateView::class;
+    protected ModuleTemplateFactory $moduleTemplateFactory;
+
     protected $distributions;
     protected $cloudFrontRepository;
     protected $exception;
 
-    public function __construct(ExtensionConfiguration $extensionConfiguration, CloudFrontRepository $cloudFrontRepository)
+    public function __construct(
+        ExtensionConfiguration $extensionConfiguration,
+        CloudFrontRepository $cloudFrontRepository,
+        ModuleTemplateFactory $moduleTemplateFactory)
     {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
         $this->cloudFrontRepository = $cloudFrontRepository;
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
-    public function indexAction(): void
+    public function indexAction(): ResponseInterface
     {
         $distributions = [];
 
@@ -50,6 +52,11 @@ class InvalidationController extends ActionController
         }
 
         $this->view->assign('distributions', $distributions);
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $moduleTemplate->setContent($this->view->render());
+
+        return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
     public function invalidateAction(string $resourcePaths): void
