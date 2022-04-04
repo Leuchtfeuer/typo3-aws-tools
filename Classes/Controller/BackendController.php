@@ -41,6 +41,7 @@ class BackendController implements SingletonInterface
 
         if ($this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
             try {
+                $identifier = '/' . ltrim($identifier, '/');
                 $distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
                 $this->cloudFrontRepository->createBatchInvalidation($distributions, $identifier);
 
