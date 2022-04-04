@@ -39,7 +39,7 @@ class BackendController implements SingletonInterface
         $data = json_decode($request->getBody()->getContents(), true);
         $item = $this->getItem($data);
 
-        if ($this->isPermitted($item, $data['type']) && $identifier = $request->getQueryParams()['identifier'] ?? false) {
+        if ($this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
             try {
                 $distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
                 $this->cloudFrontRepository->createBatchInvalidation($distributions, $identifier);
