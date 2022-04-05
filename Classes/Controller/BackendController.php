@@ -58,10 +58,6 @@ class BackendController implements SingletonInterface
         return new JsonResponse(['message' => 'An unknown error occurred.'], 500);
     }
 
-    /**
-     * @param array $data
-     * @return ResourceInterface|null
-     */
     protected function getItem(array $data): ?ResourceInterface
     {
         switch ($data['type']) {
@@ -87,11 +83,6 @@ class BackendController implements SingletonInterface
             ->getFileObjectByStorageAndIdentifier($storage, $identifier);
     }
 
-    /**
-     * @param ResourceInterface|null $item
-     * @param string $type
-     * @return bool
-     */
     protected function isPermitted(?ResourceInterface $item, string $type): bool
     {
         try {

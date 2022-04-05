@@ -68,10 +68,6 @@ class EditIconsEventListener implements SingletonInterface
         $event->setActionItems($actionItems);
     }
 
-    /**
-     * @param ResourceInterface $item
-     * @return string|null
-     */
     protected function getType(ResourceInterface $item): ?string
     {
         if ($item instanceof FolderInterface) {
