@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CloudFrontFactory implements SingletonInterface
 {
-    private static $_client;
+    private static CloudFrontClient $_client;
 
     public static function getClient(): CloudFrontClient
     {
@@ -27,6 +27,9 @@ class CloudFrontFactory implements SingletonInterface
             return static::$_client;
         }
 
+        /**
+         * @var ExtensionConfiguration $extensionConfiguration
+         */
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
         $credentials = new Credentials($extensionConfiguration->getAccessKeyId(), $extensionConfiguration->getSecretAccessKey());
 

@@ -20,9 +20,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CdnEventListener implements SingletonInterface
 {
-    protected $responsible = false;
+    protected bool $responsible = false;
 
-    protected $host = '';
+    protected string $host = '';
 
     public function __construct()
     {
@@ -32,6 +32,9 @@ class CdnEventListener implements SingletonInterface
             if (array_key_exists('TYPO3_REQUEST', $GLOBALS)) {
                 $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->toArray();
             } else {
+                /**
+                 * @var SiteConfiguration $siteConfiguration
+                 */
                 $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
                 $calledBaseUri = GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR');
                 $allSites = $siteConfiguration->getAllExistingSites();

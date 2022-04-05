@@ -21,13 +21,14 @@ use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class BackendController implements SingletonInterface
 {
-    protected $cloudFrontRepository;
+    protected CloudFrontRepository $cloudFrontRepository;
 
     public function __construct(CloudFrontRepository $cloudFrontRepository)
     {
@@ -59,9 +60,9 @@ class BackendController implements SingletonInterface
 
     /**
      * @param array $data
-     * @return FileInterface|FolderInterface|null
+     * @return ResourceInterface|null
      */
-    protected function getItem(array $data)
+    protected function getItem(array $data): ?ResourceInterface
     {
         switch ($data['type']) {
             case 'Folder':
@@ -87,11 +88,11 @@ class BackendController implements SingletonInterface
     }
 
     /**
-     * @param FileInterface|FolderInterface|null $item
+     * @param ResourceInterface|null $item
      * @param string $type
      * @return bool
      */
-    protected function isPermitted($item, string $type): bool
+    protected function isPermitted(?ResourceInterface $item, string $type): bool
     {
         try {
             return

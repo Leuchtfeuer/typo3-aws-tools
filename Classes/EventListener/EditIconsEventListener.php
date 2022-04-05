@@ -42,18 +42,26 @@ class EditIconsEventListener implements SingletonInterface
                 $identifier .= '*';
             }
 
+            /**
+             * @var UriBuilder $uriBuilder
+             */
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $attributes = [
-                'href' => (string)GeneralUtility::makeInstance(UriBuilder::class)->buildUriFromRoute('ajax_awstools_invalidate', ['identifier' => $identifier]),
+                'href' => (string)$uriBuilder->buildUriFromRoute('ajax_awstools_invalidate', ['identifier' => $identifier]),
                 'title' => $GLOBALS['LANG']->sL(sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:messages.invalid_resource_path.title', Constants::EXTENSION_KEY)),
                 'data-type' => $type,
                 'data-identifier' => $item->getIdentifier(),
                 'data-storage' => $item->getStorage()->getUid()
             ];
 
+            /**
+             * @var IconFactory $iconFactory
+             */
+            $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
             $actionItems['awstools_invalidate'] = sprintf(
                 '<a class="btn btn-default c-awstools__invalidate" %s>%s</a>',
                 GeneralUtility::implodeAttributes($attributes, true),
-                GeneralUtility::makeInstance(IconFactory::class)->getIcon('actions-bolt', Icon::SIZE_SMALL)->render()
+                $iconFactory->getIcon('actions-bolt', Icon::SIZE_SMALL)->render()
             );
         }
 
@@ -64,7 +72,7 @@ class EditIconsEventListener implements SingletonInterface
      * @param ResourceInterface $item
      * @return string|null
      */
-    protected function getType($item): ?string
+    protected function getType(ResourceInterface $item): ?string
     {
         if ($item instanceof FolderInterface) {
             return 'Folder';

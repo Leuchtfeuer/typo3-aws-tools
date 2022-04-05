@@ -17,10 +17,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExtensionConfiguration implements SingletonInterface
 {
-    private $cloudFrontDistributions = '';
-    private $accessKeyId = '';
-    private $secretAccessKey = '';
-    private $region = '';
+    private string $cloudFrontDistributions = '';
+
+    private string $accessKeyId = '';
+
+    private string $secretAccessKey = '';
+
+    private string $region = '';
 
     public function __construct()
     {

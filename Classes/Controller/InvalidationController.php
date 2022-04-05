@@ -22,12 +22,11 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class InvalidationController extends ActionController
 {
-
     protected ModuleTemplateFactory $moduleTemplateFactory;
 
-    protected $distributions;
-    protected $cloudFrontRepository;
-    protected $exception;
+    protected array $distributions;
+
+    protected CloudFrontRepository $cloudFrontRepository;
 
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
