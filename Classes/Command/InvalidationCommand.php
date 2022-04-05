@@ -58,6 +58,7 @@ class InvalidationCommand extends Command
                 $paths = implode(', ', $result['Invalidation']['InvalidationBatch']['Paths']['Items'] ?? []);
                 $this->io->success(sprintf('Marked path "%s" as invalid for distribution "%s".', urldecode($paths), $distribution));
             } catch (CloudFrontException $exception) {
+                // @extensionScannerIgnoreLine
                 $this->io->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
             }
         }
