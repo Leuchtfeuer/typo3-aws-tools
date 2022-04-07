@@ -26,11 +26,12 @@ class CdnEventListener implements SingletonInterface
 
     public function __construct()
     {
-        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if (empty($request) || ApplicationType::fromRequest($request)->isFrontend()) {
             $language = [];
 
-            if (array_key_exists('TYPO3_REQUEST', $GLOBALS)) {
-                $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->toArray();
+            if (!empty($request)) {
+                $language = $request->getAttribute('language')->toArray();
             } else {
                 /**
                  * @var SiteConfiguration $siteConfiguration
@@ -39,7 +40,7 @@ class CdnEventListener implements SingletonInterface
                 $calledBaseUri = GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR');
                 $allSites = $siteConfiguration->getAllExistingSites();
 
-                foreach($allSites as $site) {
+                foreach ($allSites as $site) {
                     $baseUri = (string)$site->getBase();
 
                     if ($baseUri === $calledBaseUri) {
