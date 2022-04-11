@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CloudFrontFactory implements SingletonInterface
 {
-    private static CloudFrontClient $_client;
+    private static ?CloudFrontClient $_client = null;
 
     public static function getClient(): CloudFrontClient
     {
