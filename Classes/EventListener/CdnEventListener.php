@@ -37,11 +37,11 @@ class CdnEventListener implements SingletonInterface
                  * @var SiteConfiguration $siteConfiguration
                  */
                 $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
-                $calledBaseUri = GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR');
+                $calledBaseUri = rtrim(GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR'), '/');
                 $allSites = $siteConfiguration->getAllExistingSites();
 
                 foreach ($allSites as $site) {
-                    $baseUri = (string)$site->getBase();
+                    $baseUri = rtrim((string)$site->getBase(), '/');
 
                     if ($baseUri === $calledBaseUri) {
                         $languages = $site->getAttribute('languages');
