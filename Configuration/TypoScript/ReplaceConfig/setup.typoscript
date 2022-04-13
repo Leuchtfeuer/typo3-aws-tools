@@ -1,4 +1,6 @@
 config.tx_awstools {
+    enabled = 1
+
     patterns {
         10 {
             search = "/typo3temp/
