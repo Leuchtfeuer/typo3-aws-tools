@@ -1,5 +1,5 @@
 <?php
-defined('TYPO3_MODE') || die('Access denied.');
+defined('TYPO3') or die('Access denied.');
 
 call_user_func(
     function ($extensionKey) {
@@ -17,10 +17,8 @@ call_user_func(
             ]
         );
 
-        if (TYPO3_MODE === 'BE') {
-            $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/AwsTools/CloudFrontInvalidationModule');
-        }
+        $pageRenderer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+        $pageRenderer->loadRequireJsModule('TYPO3/CMS/AwsTools/CloudFrontInvalidationModule');
 
     }, \Leuchtfeuer\AwsTools\Constants::EXTENSION_KEY
 );
