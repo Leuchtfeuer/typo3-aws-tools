@@ -10,34 +10,38 @@
 namespace Leuchtfeuer\AwsTools\EventListener;
 
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 
 class CdnEventListener implements SingletonInterface
 {
-    protected $responsible = false;
+    protected bool $responsible = false;
 
-    protected $host = '';
+    protected string $host = '';
 
-    public function __construct(EnvironmentService $environmentService)
+    public function __construct()
     {
-        if ($environmentService->isEnvironmentInFrontendMode()) {
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if (empty($request) || ApplicationType::fromRequest($request)->isFrontend()) {
             $language = [];
 
-            if (array_key_exists('TYPO3_REQUEST', $GLOBALS)) {
-                $language = $GLOBALS['TYPO3_REQUEST']->getAttribute('language')->toArray();
+            if (!empty($request)) {
+                $language = $request->getAttribute('language')->toArray();
             } else {
+                /**
+                 * @var SiteConfiguration $siteConfiguration
+                 */
                 $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
-                $calledBaseUri = GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR');
+                $calledBaseUri = rtrim(GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR'), '/');
                 $allSites = $siteConfiguration->getAllExistingSites();
 
-                foreach($allSites as $site) {
-                    $baseUri = (string)$site->getBase();
+                foreach ($allSites as $site) {
+                    $baseUri = rtrim((string)$site->getBase(), '/');
 
                     if ($baseUri === $calledBaseUri) {
                         $languages = $site->getAttribute('languages');
@@ -66,6 +70,7 @@ class CdnEventListener implements SingletonInterface
         $resource = $event->getResource();
 
         if ($driver instanceof AbstractHierarchicalFilesystemDriver && $resource instanceof FileInterface) {
+            // @extensionScannerIgnoreLine
             $publicUrl = $driver->getPublicUrl($resource->getIdentifier());
             $event->setPublicUrl($this->host . $publicUrl);
         }

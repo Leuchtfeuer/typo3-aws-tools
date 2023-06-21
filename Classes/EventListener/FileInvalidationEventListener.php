@@ -22,8 +22,9 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
 {
     use LoggerAwareTrait;
 
-    private $distributions;
-    private $cloudFrontRepository;
+    private array $distributions;
+
+    private CloudFrontRepository $cloudFrontRepository;
 
     public function __construct(ExtensionConfiguration $extensionConfiguration, CloudFrontRepository $cloudFrontRepository)
     {
@@ -46,6 +47,7 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
         try {
             $this->cloudFrontRepository->createBatchInvalidation($this->distributions, $path);
         } catch (CloudFrontException $exception) {
+            // @extensionScannerIgnoreLine
             $this->logger->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
         }
     }

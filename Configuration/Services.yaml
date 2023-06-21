@@ -39,4 +39,9 @@ services:
         method: invalidateFile
         event: TYPO3\CMS\Core\Resource\Event\AfterFileContentsSetEvent
 
-
+  Leuchtfeuer\AwsTools\EventListener\EditIconsEventListener:
+    tags:
+      - name: event.listener
+        identifier: awstools.manipulateEditIcons
+        method: manipulateEditIcons
+        event: TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent

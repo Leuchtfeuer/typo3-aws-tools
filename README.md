@@ -52,6 +52,8 @@ extension) configured in the TypoScript setup are rewritten by a regular express
 
 ```
 config.tx_awstools {
+    enabled = 1
+
     patterns {
         10 {
             search = "/typo3temp/
@@ -73,6 +75,8 @@ The "patterns" option can be extended by any number of additional entries. Each 
 pattern, so that it applies to `href="/typo3temp/assets/...` for example. If the pattern did not include the quotation mark, this 
 would lead to serious errors, as links like `href="https://cdn.example.com/typo3temp/assets/"` would be rewritten to 
 `https://cdn.example.comhttps://cdn.example.com/typo3temp/assets/`.
+
+Additionally, the value `config` can be used to deactivate content replacement. This will disable path rewriting in frontend.
 
 ### Extension Configuration
 

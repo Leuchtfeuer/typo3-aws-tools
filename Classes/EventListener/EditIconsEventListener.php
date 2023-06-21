@@ -7,7 +7,7 @@
  * Florian Wessels <f.wessels@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
  */
 
-namespace Leuchtfeuer\AwsTools\Hook;
+namespace Leuchtfeuer\AwsTools\EventListener;
 
 use Leuchtfeuer\AwsTools\Constants;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
@@ -16,22 +16,23 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\ResourceInterface;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Filelist\FileList;
-use TYPO3\CMS\Filelist\FileListEditIconHookInterface;
+use TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent;
 
-class EditIconsHook implements FileListEditIconHookInterface
+class EditIconsEventListener implements SingletonInterface
 {
     /**
-     * @param array $cells
-     * @param FileList $parentObject
+     * @param ProcessFileListActionsEvent $event
      *
      * @throws RouteNotFoundException
      */
-    public function manipulateEditIcons(&$cells, &$parentObject)
+    public function manipulateEditIcons(ProcessFileListActionsEvent $event): void
     {
-        /** @var FolderInterface|FileInterface $item */
-        $item = $cells['__fileOrFolderObject'];
+        $actionItems = $event->getActionItems();
+
+        $item = $event->getResource();
         $type = $this->getType($item);
 
         if ($type !== null && $item->getStorage()->checkUserActionPermission('invalidate', $type)) {
@@ -41,27 +42,33 @@ class EditIconsHook implements FileListEditIconHookInterface
                 $identifier .= '*';
             }
 
+            /**
+             * @var UriBuilder $uriBuilder
+             */
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $attributes = [
-                'href' => (string)GeneralUtility::makeInstance(UriBuilder::class)->buildUriFromRoute('ajax_awstools_invalidate', ['identifier' => $identifier]),
+                'href' => (string)$uriBuilder->buildUriFromRoute('ajax_awstools_invalidate', ['identifier' => $identifier]),
                 'title' => $GLOBALS['LANG']->sL(sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:messages.invalid_resource_path.title', Constants::EXTENSION_KEY)),
                 'data-type' => $type,
                 'data-identifier' => $item->getIdentifier(),
                 'data-storage' => $item->getStorage()->getUid()
             ];
 
-            $cells['awstools_invalidate'] = sprintf(
+            /**
+             * @var IconFactory $iconFactory
+             */
+            $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+            $actionItems['awstools_invalidate'] = sprintf(
                 '<a class="btn btn-default c-awstools__invalidate" %s>%s</a>',
                 GeneralUtility::implodeAttributes($attributes, true),
-                GeneralUtility::makeInstance(IconFactory::class)->getIcon('actions-bolt', Icon::SIZE_SMALL)->render()
+                $iconFactory->getIcon('actions-bolt', Icon::SIZE_SMALL)->render()
             );
         }
+
+        $event->setActionItems($actionItems);
     }
 
-    /**
-     * @param FileInterface|FolderInterface $item
-     * @return string|null
-     */
-    protected function getType($item): ?string
+    protected function getType(ResourceInterface $item): ?string
     {
         if ($item instanceof FolderInterface) {
             return 'Folder';
