@@ -51,8 +51,8 @@ class CdnEventListener implements SingletonInterface
                 }
             }
 
-            $config = $GLOBALS['TSFE']->config['config']['tx_awstools.'] ?? [];
-            $this->responsible = filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host']) && !empty($config['enabled']);
+            $replacer = $GLOBALS['TSFE']->config['config']['tx_awstools.']['replacer.'] ?? [];
+            $this->responsible = filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host'] && $replacer['eventListener'] === '1');
 
             if ($this->responsible) {
                 $this->host = $language['awstools_cdn_host'];

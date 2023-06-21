@@ -12,4 +12,8 @@ config.tx_awstools {
             replace = "%s/typo3conf/
         }
     }
+    replacer {
+        eventListener = 1
+        middleware = 1
+    }
 }
