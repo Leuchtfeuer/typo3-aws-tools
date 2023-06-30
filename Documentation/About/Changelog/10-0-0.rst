@@ -1,0 +1,23 @@
+.. include:: ../../Includes.txt
+
+==========================
+Version 10.0.0 - 2023/06/30
+==========================
+
+* Add possibility to deactivate url replacement through eventlistener or middleware
+* Changes the major version number of the extension equivalent to the supported TYPO3 version.
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v10.0.0>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2023-06-30 [TASK] change author (Commit 9175f48 by Marcus Balasch)
+    2023-06-21 [TASK] Add possibility to deactivate url replacement through eventlistener or middleware (#7) (Commit cc63e72 by Fabian Martin)
+    2022-03-28 [TASK] Inlucde latest vendor package changes (Commit 43e4fa3 by Max Rösch)

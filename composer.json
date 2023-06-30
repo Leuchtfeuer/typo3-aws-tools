@@ -10,11 +10,11 @@
     ],
     "type": "typo3-cms-extension",
     "license": "GPL-2.0-or-later",
-    "homepage": "https://www.Leuchtfeuer.com",
+    "homepage": "https://www.leuchtfeuer.com",
     "authors": [
         {
-            "name": "Florian Wessels",
-            "email": "f.wessels@Leuchtfeuer.com",
+            "name": "Dev",
+            "email": "dev@Leuchtfeuer.com",
             "role": "Developer",
             "homepage": "https://www.Leuchtfeuer.com"
         }

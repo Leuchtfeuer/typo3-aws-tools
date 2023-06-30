@@ -19,7 +19,7 @@ AWS Tools for TYPO3
    2020
 
 :Authors:
-   Florian Wessels, Leuchtfeuer Digital Marketing
+   Marcus Balasch, Leuchtfeuer Digital Marketing
 
 :Email:
    dev@Leuchtfeuer.com
