@@ -3,7 +3,7 @@
 $EM_CONF['aws_tools'] = [
     'title' => 'Amazon Web Services (AWS) Toolbox',
     'description' => 'This extension connects your TYPO3 instance to Amazon CloudFront. It rewrites all file paths in the frontend to match your CDN domain. You also have the possibility to invalidate Amazon CloudFront entries.',
-    'version' => '1.0.5',
+    'version' => '10.0.0',
     'category' => 'misc',
     'constraints' => [
         'depends' => [
@@ -15,7 +15,7 @@ $EM_CONF['aws_tools'] = [
     'state' => 'stable',
     'uploadfolder' => false,
     'clearCacheOnLoad' => false,
-    'author' => 'Florian Wessels',
+    'author' => 'Dev',
     'author_email' => 'dev@Leuchtfeuer.com',
     'author_company' => 'Leuchtfeuer Digital Marketing',
     'autoload' => [

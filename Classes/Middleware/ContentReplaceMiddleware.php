@@ -4,7 +4,7 @@
  * This file is part of the "AWS Tools" extension for TYPO3 CMS.
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * Florian Wessels <f.wessels@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
  */
 
 namespace Leuchtfeuer\AwsTools\Middleware;
@@ -23,11 +23,7 @@ class ContentReplaceMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
         $config = $GLOBALS['TSFE']->config['config']['tx_awstools.'] ?? [];
 
-        if (filter_var($language['awstools_cdn_enabled'] ?? false, FILTER_VALIDATE_BOOLEAN) === false
-            || empty($language['awstools_cdn_host'])
-            || empty($config['enabled'])
-            || $config['replacer.']['middleware'] !== '1'
-        ) {
+        if (filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host']) || $config['replacer.']['middleware'] !== '1') {
             return $response;
         }
 
