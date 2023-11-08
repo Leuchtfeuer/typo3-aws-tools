@@ -22,7 +22,7 @@
                 <source>The path "%s" is an invalid resource path. Please use the file path as displayed in the web browser.</source>
             </trans-unit>
             <trans-unit id="messages.invalid_resource_path.title">
-                <source>Invalid file path</source>
+                <source>Invalidate file path</source>
             </trans-unit>
             <trans-unit id="content.invalidation_id">
                 <source>Invalidation ID</source>

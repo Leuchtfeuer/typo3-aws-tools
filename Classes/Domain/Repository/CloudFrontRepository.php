@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Http\Uri;
 
 class CloudFrontRepository
 {
-    protected $cloudFrontClient;
+    protected CloudFrontClient $cloudFrontClient;
 
     public function __construct(CloudFrontClient $cloudFrontClient)
     {

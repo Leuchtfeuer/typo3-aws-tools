@@ -21,17 +21,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class InvalidationCommand extends Command
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
+    private SymfonyStyle $io;
 
-    /**
-     * @var CloudFrontRepository
-     */
-    private $cloudFrontRepository;
+    private CloudFrontRepository $cloudFrontRepository;
 
-    private $distributions = [];
+    private array $distributions = [];
 
     protected function configure(): void
     {
@@ -58,6 +52,7 @@ class InvalidationCommand extends Command
                 $paths = implode(', ', $result['Invalidation']['InvalidationBatch']['Paths']['Items'] ?? []);
                 $this->io->success(sprintf('Marked path "%s" as invalid for distribution "%s".', urldecode($paths), $distribution));
             } catch (CloudFrontException $exception) {
+                // @extensionScannerIgnoreLine
                 $this->io->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
             }
         }
