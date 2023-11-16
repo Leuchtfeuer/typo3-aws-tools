@@ -4,7 +4,7 @@
 Version 11.0.1 - 2023/11/16
 ===========================
 
-* Update extension doumentation
+* Update extension documentation
 
 Download
 ========
