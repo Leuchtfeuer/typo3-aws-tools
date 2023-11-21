@@ -1,8 +1,8 @@
 .. include:: ../../Includes.txt
 
-==========================
+===========================
 Version 10.0.0 - 2023/06/30
-==========================
+===========================
 
 * Add possibility to deactivate url replacement through eventlistener or middleware
 * Changes the major version number of the extension equivalent to the supported TYPO3 version.
