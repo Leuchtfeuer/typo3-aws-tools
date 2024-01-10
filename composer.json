@@ -26,9 +26,9 @@
     },
     "require": {
         "aws/aws-sdk-php": "^3.149",
-        "typo3/cms-backend": "^11.5",
-        "typo3/cms-core": "^11.5",
-        "typo3/cms-extbase": "^11.5"
+        "typo3/cms-backend": "^12.4",
+        "typo3/cms-core": "^12.4",
+        "typo3/cms-extbase": "^12.4"
     },
     "replace": {
         "typo3-ter/aws-tools": "self.version"
