@@ -13,8 +13,6 @@ $EM_CONF['aws_tools'] = [
         'suggests' => [],
     ],
     'state' => 'stable',
-    'uploadfolder' => false,
-    'clearCacheOnLoad' => false,
     'author' => 'Dev',
     'author_email' => 'dev@Leuchtfeuer.com',
     'author_company' => 'Leuchtfeuer Digital Marketing',
