@@ -15,10 +15,10 @@ use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 
 class InvalidationController extends ActionController
 {
@@ -46,19 +46,17 @@ class InvalidationController extends ActionController
             try {
                 $distributions[$distribution] = $this->cloudFrontRepository->findInvalidationsByDistribution($distribution)['InvalidationList'];
             } catch (AwsException $exception) {
-                $this->addAwsException($exception, AbstractMessage::WARNING);
+                $this->addAwsException($exception, ContextualFeedbackSeverity::WARNING);
             }
         }
 
-        $this->view->assign('distributions', $distributions);
-
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $moduleTemplate->setContent($this->view->render());
+        $moduleTemplate->assign('distributions', $distributions);
 
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        return $moduleTemplate->renderResponse();
     }
 
-    public function invalidateAction(string $resourcePaths): void
+    public function invalidateAction(string $resourcePaths): ResponseInterface
     {
         foreach ($this->distributions as $distribution) {
             try {
@@ -68,19 +66,19 @@ class InvalidationController extends ActionController
                 $this->addFlashMessage(
                     LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($paths), $distribution]),
                     LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME),
-                    AbstractMessage::OK
+                    ContextualFeedbackSeverity::OK
                 );
             } catch (AwsException $exception) {
-                $this->addAwsException($exception, AbstractMessage::ERROR);
+                $this->addAwsException($exception, ContextualFeedbackSeverity::ERROR);
             }
         }
 
-        $this->redirect('index');
+        return $this->redirect('index');
     }
 
     protected function addAwsException(
         AwsException $exception,
-        int $severity = AbstractMessage::ERROR,
+        ContextualFeedbackSeverity $severity = ContextualFeedbackSeverity::ERROR,
         bool $storeInSession = true
     ): void {
         $this->addFlashMessage(
@@ -96,13 +94,13 @@ class InvalidationController extends ActionController
         $resourcePaths = [];
 
         foreach (GeneralUtility::trimExplode(LF, $paths, true) as $path) {
-            if (strpos($path, ' ') === false) {
+            if (!str_contains($path, ' ')) {
                 $resourcePaths[] = $path;
             } else {
                 $this->addFlashMessage(
                     LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]),
                     LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME),
-                    AbstractMessage::WARNING
+                    ContextualFeedbackSeverity::WARNING
                 );
             }
         }
