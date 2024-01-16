@@ -23,7 +23,7 @@ class ContentReplaceMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
         $config = $GLOBALS['TSFE']->config['config']['tx_awstools.'] ?? [];
 
-        if (filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host']) || $config['replacer.']['middleware'] !== '1') {
+        if (empty($config['enabled']) || filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host']) || $config['replacer.']['middleware'] !== '1') {
             return $response;
         }
 
