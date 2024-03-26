@@ -24,7 +24,7 @@ services:
   Leuchtfeuer\AwsTools\EventListener\CdnEventListener:
     tags:
       - name: event.listener
-        identifier: sdl.generatePublicUrlForResource
+        identifier: awstools.generatePublicUrlForResource
         method: onResourceStorageEmitPreGeneratePublicUrlSignal
         event: TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent
 
