@@ -24,7 +24,7 @@ services:
   Leuchtfeuer\AwsTools\EventListener\CdnEventListener:
     tags:
       - name: event.listener
-        identifier: sdl.generatePublicUrlForResource
+        identifier: awstools.generatePublicUrlForResource
         method: onResourceStorageEmitPreGeneratePublicUrlSignal
         event: TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent
 
@@ -39,4 +39,9 @@ services:
         method: invalidateFile
         event: TYPO3\CMS\Core\Resource\Event\AfterFileContentsSetEvent
 
-
+  Leuchtfeuer\AwsTools\EventListener\EditIconsEventListener:
+    tags:
+      - name: event.listener
+        identifier: awstools.manipulateEditIcons
+        method: manipulateEditIcons
+        event: TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent

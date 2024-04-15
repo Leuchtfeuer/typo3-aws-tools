@@ -1,0 +1,30 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 11.0.0 - 2023/11/02
+===========================
+
+* Add TYPO3 11 support
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v11.0.0>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2023-11-02 Merge remote-tracking branch 'origin/master' into typo3-11 (Commit e5737c6 by Andreas Engel)
+    2023-11-02 [TASK] Update external libraries (Commit 3d6aee6 by Andreas Engel)
+    2023-06-30 [BUGFIX] Fix path for invalidation via filelist module (#4) (Commit 0e7d068 by bitmotionAE)
+    2023-06-30 Fix undefined array key "awstools_cdn_enabled" warnings (#6) (Commit 3942b16 by André Buchmann)
+    2023-06-21 [TASK] Add possibility to deactivate url replacement through eventlistener or middleware (#8) (Commit f5be17c by Fabian Martin)
+    2022-04-14 [TASK] Migrate ext_tables.php (Commit 0c1800f by Andreas Engel)
+    2022-04-14 [TASK] Fix translation (Commit 13094e1 by Andreas Engel)
+    2022-04-13 [TASK] Add option to disable content replacement in frontend via TypoScript (Commit a3fca21 by Andreas Engel)
+    2022-04-12 [TASK] Fix base uri comparison (Commit 134add9 by Andreas Engel)
+    2022-04-11 [TASK] Fix type casting error (Commit 94497d1 by Andreas Engel)
+    2022-04-07 [TASK] Handle cases with non-available request object (Commit 2d7262e by Andreas Engel)

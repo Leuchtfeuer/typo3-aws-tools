@@ -1,4 +1,6 @@
 config.tx_awstools {
+    enabled = 1
+
     patterns {
         10 {
             search = "/typo3temp/
@@ -10,6 +12,7 @@ config.tx_awstools {
             replace = "%s/typo3conf/
         }
     }
+
     replacer {
         eventListener = 1
         middleware = 1
