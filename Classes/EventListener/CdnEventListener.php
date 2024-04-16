@@ -49,10 +49,16 @@ class CdnEventListener implements SingletonInterface
                         break;
                     }
                 }
+
+                if (count($language) === 0 && $site = reset($allSites)) {
+                    // if no site matches, get the first as default
+                    $languages = $site->getAttribute('languages');
+                    $language = reset($languages);
+                }
             }
 
             $replacer = $GLOBALS['TSFE']->config['config']['tx_awstools.']['replacer.'] ?? [];
-            $this->responsible = filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host'] && $replacer['eventListener'] === '1');
+            $this->responsible = isset($language['awstools_cdn_enabled']) && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host'] && $replacer['eventListener'] === '1');
 
             if ($this->responsible) {
                 $this->host = $language['awstools_cdn_host'];
