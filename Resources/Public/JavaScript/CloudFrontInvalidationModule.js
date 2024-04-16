@@ -1,4 +1,6 @@
-define(['TYPO3/CMS/Backend/Notification'], function (Notification) {
+import Notification from "@typo3/backend/notification.js";
+
+(function () {
     let CloudFrontInvalidationModule = {
         init: function () {
             const actionButtons = document.getElementsByClassName('c-awstools__invalidate');
@@ -52,4 +54,4 @@ define(['TYPO3/CMS/Backend/Notification'], function (Notification) {
     CloudFrontInvalidationModule.init();
 
     return CloudFrontInvalidationModule;
-})
+}());

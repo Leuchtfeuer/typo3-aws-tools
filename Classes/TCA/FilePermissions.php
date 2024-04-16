@@ -21,11 +21,11 @@ class FilePermissions
         foreach ($GLOBALS['TCA'][$tableName]['columns']['file_permissions']['config']['items'] as $item) {
             $items[] = $item;
 
-            if ($item[1] === 'recursivedeleteFolder') {
+            if ($item['value'] === 'recursivedeleteFolder') {
                 $items[] = $filePermissions['invalidateFolder'];
             }
 
-            if ($item[1] === 'deleteFile') {
+            if ($item['value'] === 'deleteFile') {
                 $items[] = $filePermissions['invalidateFile'];
             }
         }
@@ -40,14 +40,14 @@ class FilePermissions
     {
         return [
             'invalidateFile' => [
-                sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:file_permissions.invalidate_file', Constants::EXTENSION_KEY),
-                'invalidateFile',
-                'mimetypes-other-other',
+                'label' => sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:file_permissions.invalidate_file', Constants::EXTENSION_KEY),
+                'value' => 'invalidateFile',
+                'icon' => 'mimetypes-other-other',
             ],
             'invalidateFolder' => [
-                sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:file_permissions.invalidate_folder', Constants::EXTENSION_KEY),
-                'invalidateFolder',
-                'apps-filetree-folder-default',
+                'label' => sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:file_permissions.invalidate_folder', Constants::EXTENSION_KEY),
+                'value' => 'invalidateFolder',
+                'icon' => 'apps-filetree-folder-default',
             ],
         ];
     }
