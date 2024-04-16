@@ -1,0 +1,29 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 12.0.0 - 2024/04/16
+===========================
+
+* Add support for TYPO3 12
+* Drop support for TYPO3 11
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v12.0.0>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2024-04-16 Merge branch 'bugfix/ensure_language_is_set_20240411233' into typo3v12 (Commit 466a77c by Oliver Heins)
+    2024-04-12 [TASK] Ensure language array is set (Commit a299c55 by Oliver Heins)
+    2024-01-16 [TASK] Reactivate option to enable/disable url replacement via typoscript (Commit 24e8e68 by Andreas Engel)
+    2024-01-16 [TASK] Update external libraries (Commit a14aafc by Andreas Engel)
+    2024-01-12 [TASK] Apply rector changes (Commit b9cf1c6 by Andreas Engel)
+    2024-01-12 [TASK] Multiple adjustments for TYPO3 12 compatibility (Commit 458a116 by Andreas Engel)
+    2024-01-10 [TASK] Fix TYPO3_MODE checks (Commit ff3ce6f by Andreas Engel)
+    2024-01-10 [TASK] Fix TYPO3_MODE check in ext_tables.php (Commit f6514bd by Andreas Engel)
+    2024-01-10 [TASK] Raise requirements to TYPO3 12 (Commit 297796a by Andreas Engel)
