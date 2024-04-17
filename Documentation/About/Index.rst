@@ -15,13 +15,15 @@ entries.
 Compatibility
 =============
 
-You need access to an Auth0 instance. We are currently supporting following TYPO3 versions:
+We are currently supporting following TYPO3 versions:
 
 .. csv-table:: Version Matrix
-   :header: "Extension Version", "TYPO3 v10 Support", "TYPO3 v9 Support", "TYPO3 v8 Support"
+   :header: "Extension Version", "TYPO3 v12 Support", "TYPO3 v11 Support", "TYPO3 v10 Support"
    :align: center
 
-        "0.x", "🙋‍♂️", "🙅‍♀️", "🙅‍♀️"
+        "12.x", "yes", "no", "no"
+        "11.x", "no", "yes", "no"
+        "10.x", "no", "no", "yes"
 
 .. _about-aboutAmazonCloudFront:
 
