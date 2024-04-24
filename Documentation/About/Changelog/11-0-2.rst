@@ -1,0 +1,27 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 11.0.2 - 2024/04/16
+===========================
+
+* Fix prefix of generatePublicUrlForResource event-listener
+* Ensure language array is set
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v11.0.2>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2024-04-16 Merge pull request #16 from Leuchtfeuer/bugfix/ensure_language_is_set_20240411233 (Commit 1767bde by Niklas Grieger)
+    2024-04-15 Merge pull request #17 from Leuchtfeuer/master (Commit ad63055 by bitmotionAE)
+    2024-04-12 [TASK] Ensure language array is set (Commit a299c55 by Oliver Heins)
+    2024-03-26 Merge pull request #15 from doppelD-LF/master (Commit f2e4f3a by Daniel Diele)
+    2024-03-26 [BUGFIX] Fix prefix of generatePublicUrlForResource event-listener (Commit aac1307 by Daniel Diele)
+    2023-11-21 Merge pull request #12 from Leuchtfeuer/typo3-11 (Commit 8d3995f by bitmotionAE)
+    2023-11-08 Merge pull request #10 from Leuchtfeuer/typo3-11 (Commit eee258a by bitmotionAE)

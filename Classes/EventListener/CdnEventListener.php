@@ -16,7 +16,7 @@ use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class CdnEventListener implements SingletonInterface
 {
@@ -57,8 +57,10 @@ class CdnEventListener implements SingletonInterface
                 }
             }
 
-            $config = $GLOBALS['TSFE']->config['config']['tx_awstools.'] ?? [];
-            $this->responsible = !empty($config['enabled']) && isset($language['awstools_cdn_enabled']) && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host'] && $config['replacer.']['eventListener'] === '1');
+            $typoscript = GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
+                ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+            $config = $typoscript['config']['tx_awstools.'] ?? [];
+            $this->responsible = isset($config['enabled'], $config['replacer.']['eventListener'], $language['awstools_cdn_enabled']) && $config['enabled'] && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host']) && $config['replacer.']['eventListener'] === '1';
 
             if ($this->responsible) {
                 $this->host = $language['awstools_cdn_host'];
