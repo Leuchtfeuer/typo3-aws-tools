@@ -38,6 +38,10 @@ services:
         identifier: awstools.postFileSetContents
         method: invalidateFile
         event: TYPO3\CMS\Core\Resource\Event\AfterFileContentsSetEvent
+      - name: event.listener
+        identifier: awstools.preFileDeleted
+        method: invalidateFileOnDeleting
+        event: TYPO3\CMS\Core\Resource\Event\BeforeFileDeletedEvent
 
   Leuchtfeuer\AwsTools\EventListener\EditIconsEventListener:
     tags:
