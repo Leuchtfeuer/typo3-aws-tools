@@ -15,6 +15,7 @@ use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Resource\Event\AfterFileContentsSetEvent;
+use TYPO3\CMS\Core\Resource\Event\BeforeFileDeletedEvent;
 use TYPO3\CMS\Core\Resource\Event\BeforeFileReplacedEvent;
 use TYPO3\CMS\Core\SingletonInterface;
 
@@ -38,6 +39,11 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
     }
 
     public function invalidateFile(AfterFileContentsSetEvent $event): void
+    {
+        $this->invalidatePath($event->getFile()->getPublicUrl());
+    }
+
+    public function invalidateFileOnDeleting(BeforeFileDeletedEvent $event): void
     {
         $this->invalidatePath($event->getFile()->getPublicUrl());
     }
