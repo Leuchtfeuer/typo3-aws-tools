@@ -13,7 +13,9 @@ use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
+use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperRegistry;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -68,13 +70,14 @@ class CdnEventListener implements SingletonInterface
 
     public function onResourceStorageEmitPreGeneratePublicUrlSignal(GeneratePublicUrlForResourceEvent $event): void
     {
-        if (!$this->responsible) {
+        $resource = $event->getResource();
+
+        if (!$this->responsible
+            || ($resource instanceof File && OnlineMediaHelperRegistry::getInstance()->getOnlineMediaHelper($resource) !== false)) {
             return;
         }
 
         $driver = $event->getDriver();
-        $resource = $event->getResource();
-
         if ($driver instanceof AbstractHierarchicalFilesystemDriver && $resource instanceof FileInterface) {
             // @extensionScannerIgnoreLine
             $publicUrl = $driver->getPublicUrl($resource->getIdentifier());
