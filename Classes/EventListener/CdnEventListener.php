@@ -75,7 +75,7 @@ class CdnEventListener implements SingletonInterface
         $resource = $event->getResource();
 
         if (!$this->responsible
-            || ($resource instanceof File && OnlineMediaHelperRegistry::getInstance()->getOnlineMediaHelper($resource) !== false)) {
+            || ($resource instanceof File && GeneralUtility::makeInstance(OnlineMediaHelperRegistry::class)->getOnlineMediaHelper($resource) !== false)) {
             return;
         }
 

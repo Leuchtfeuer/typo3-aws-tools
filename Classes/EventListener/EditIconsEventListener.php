@@ -12,8 +12,8 @@ namespace Leuchtfeuer\AwsTools\EventListener;
 use Leuchtfeuer\AwsTools\Constants;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
@@ -61,7 +61,7 @@ class EditIconsEventListener implements SingletonInterface
             $actionItems['awstools_invalidate'] = sprintf(
                 '<a class="btn btn-default c-awstools__invalidate" %s>%s</a>',
                 GeneralUtility::implodeAttributes($attributes, true),
-                $iconFactory->getIcon('actions-bolt', Icon::SIZE_SMALL)->render()
+                $iconFactory->getIcon('actions-bolt', IconSize::SMALL)->render()
             );
         }
 
