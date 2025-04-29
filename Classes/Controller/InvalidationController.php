@@ -53,7 +53,7 @@ class InvalidationController extends ActionController
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $moduleTemplate->assign('distributions', $distributions);
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('Invalidation/Index');
     }
 
     public function invalidateAction(string $resourcePaths): ResponseInterface
