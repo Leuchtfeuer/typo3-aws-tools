@@ -25,12 +25,9 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
 
     private array $distributions;
 
-    private CloudFrontRepository $cloudFrontRepository;
-
-    public function __construct(ExtensionConfiguration $extensionConfiguration, CloudFrontRepository $cloudFrontRepository)
+    public function __construct(ExtensionConfiguration $extensionConfiguration, private CloudFrontRepository $cloudFrontRepository)
     {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
-        $this->cloudFrontRepository = $cloudFrontRepository;
     }
 
     public function invalidateOnBackendUploadReplace(BeforeFileReplacedEvent $event)

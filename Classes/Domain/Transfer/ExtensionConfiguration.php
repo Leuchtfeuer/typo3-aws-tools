@@ -29,7 +29,7 @@ class ExtensionConfiguration implements SingletonInterface
     {
         try {
             $configuration = GeneralUtility::makeInstance(CoreExtensionConfiguration::class)->get(Constants::EXTENSION_KEY);
-        } catch (ExtensionConfigurationExtensionNotConfiguredException $exception) {
+        } catch (ExtensionConfigurationExtensionNotConfiguredException) {
             $configuration = [];
         }
 
@@ -41,7 +41,7 @@ class ExtensionConfiguration implements SingletonInterface
     protected function setPropertiesFromConfiguration(array $configuration): void
     {
         foreach ($configuration as $key => $value) {
-            if (property_exists(__CLASS__, $key)) {
+            if (property_exists(self::class, $key)) {
                 $this->$key = $value;
             }
         }

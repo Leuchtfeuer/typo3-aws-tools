@@ -24,8 +24,6 @@ use TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent;
 class EditIconsEventListener implements SingletonInterface
 {
     /**
-     * @param ProcessFileListActionsEvent $event
-     *
      * @throws RouteNotFoundException
      */
     public function manipulateEditIcons(ProcessFileListActionsEvent $event): void

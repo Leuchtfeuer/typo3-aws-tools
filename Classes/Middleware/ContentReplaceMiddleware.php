@@ -36,7 +36,7 @@ class ContentReplaceMiddleware implements MiddlewareInterface
             $replacements[] = sprintf($search['replace'], $host);
         }
 
-        if (!empty($patterns)) {
+        if ($patterns !== []) {
             $body = $response->getBody();
             $body->rewind();
             $contents = $response->getBody()->getContents();
