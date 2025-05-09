@@ -64,7 +64,12 @@ class CdnEventListener implements SingletonInterface
                     ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
                 $config = $typoscript['config']['tx_awstools.'] ?? [];
-                $this->responsible = isset($config['enabled'], $config['replacer.']['eventListener'], $language['awstools_cdn_enabled']) && $config['enabled'] && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host']) && $config['replacer.']['eventListener'] === '1';
+                $this->responsible = false;
+                if (!empty($config['enabled']) && !empty($config['replacer.']['eventListener'])
+                    && !empty($language['awstools_cdn_enabled']) && !empty($language['awstools_cdn_host'])
+                ) {
+                    $this->responsible = true;
+                }
             } catch (\Exception $exception) {
                 $this->responsible = false;
             }
