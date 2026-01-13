@@ -1,0 +1,20 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 12.0.2 - 2026/01/13
+===========================
+
+* Update external libraries
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v12.0.2>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2026-01-13 [TASK] Update external library aws-sdk-php (Commit b9ee3bc by engel)
