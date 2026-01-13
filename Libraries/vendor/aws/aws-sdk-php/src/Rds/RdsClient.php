@@ -148,6 +148,8 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise createDBProxyAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result createDBProxyEndpoint(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise createDBProxyEndpointAsync(array $args = []) (supported in versions 2014-10-31)
+ * @method \Aws\Result createDBShardGroup(array $args = []) (supported in versions 2014-10-31)
+ * @method \GuzzleHttp\Promise\Promise createDBShardGroupAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result createGlobalCluster(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise createGlobalClusterAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result createIntegration(array $args = []) (supported in versions 2014-10-31)
@@ -174,6 +176,8 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise deleteDBProxyAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result deleteDBProxyEndpoint(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise deleteDBProxyEndpointAsync(array $args = []) (supported in versions 2014-10-31)
+ * @method \Aws\Result deleteDBShardGroup(array $args = []) (supported in versions 2014-10-31)
+ * @method \GuzzleHttp\Promise\Promise deleteDBShardGroupAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result deleteGlobalCluster(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise deleteGlobalClusterAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result deleteIntegration(array $args = []) (supported in versions 2014-10-31)
@@ -206,6 +210,8 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise describeDBClustersAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result describeDBInstanceAutomatedBackups(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise describeDBInstanceAutomatedBackupsAsync(array $args = []) (supported in versions 2014-10-31)
+ * @method \Aws\Result describeDBMajorEngineVersions(array $args = []) (supported in versions 2014-10-31)
+ * @method \GuzzleHttp\Promise\Promise describeDBMajorEngineVersionsAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result describeDBProxies(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise describeDBProxiesAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result describeDBProxyEndpoints(array $args = []) (supported in versions 2014-10-31)
@@ -216,6 +222,8 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise describeDBProxyTargetsAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result describeDBRecommendations(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise describeDBRecommendationsAsync(array $args = []) (supported in versions 2014-10-31)
+ * @method \Aws\Result describeDBShardGroups(array $args = []) (supported in versions 2014-10-31)
+ * @method \GuzzleHttp\Promise\Promise describeDBShardGroupsAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result describeDBSnapshotAttributes(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise describeDBSnapshotAttributesAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result describeDBSnapshotTenantDatabases(array $args = []) (supported in versions 2014-10-31)
@@ -268,18 +276,24 @@ use Aws\PresignUrlMiddleware;
  * @method \GuzzleHttp\Promise\Promise modifyDBProxyTargetGroupAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result modifyDBRecommendation(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise modifyDBRecommendationAsync(array $args = []) (supported in versions 2014-10-31)
+ * @method \Aws\Result modifyDBShardGroup(array $args = []) (supported in versions 2014-10-31)
+ * @method \GuzzleHttp\Promise\Promise modifyDBShardGroupAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result modifyDBSnapshot(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise modifyDBSnapshotAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result modifyDBSnapshotAttribute(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise modifyDBSnapshotAttributeAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result modifyGlobalCluster(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise modifyGlobalClusterAsync(array $args = []) (supported in versions 2014-10-31)
+ * @method \Aws\Result modifyIntegration(array $args = []) (supported in versions 2014-10-31)
+ * @method \GuzzleHttp\Promise\Promise modifyIntegrationAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result modifyTenantDatabase(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise modifyTenantDatabaseAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result promoteReadReplicaDBCluster(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise promoteReadReplicaDBClusterAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result rebootDBCluster(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise rebootDBClusterAsync(array $args = []) (supported in versions 2014-10-31)
+ * @method \Aws\Result rebootDBShardGroup(array $args = []) (supported in versions 2014-10-31)
+ * @method \GuzzleHttp\Promise\Promise rebootDBShardGroupAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result registerDBProxyTargets(array $args = []) (supported in versions 2014-10-31)
  * @method \GuzzleHttp\Promise\Promise registerDBProxyTargetsAsync(array $args = []) (supported in versions 2014-10-31)
  * @method \Aws\Result removeFromGlobalCluster(array $args = []) (supported in versions 2014-10-31)
@@ -343,6 +357,13 @@ class RdsClient extends AwsClient
                         'service' => 'rds',
                         'presign_param' => 'PreSignedUrl',
                         'require_different_region' => true,
+                        'extra_query_params' => [
+                            'CopyDBSnapshot' => ['DestinationRegion'],
+                            'CreateDBInstanceReadReplica' => ['DestinationRegion'],
+                            'CopyDBClusterSnapshot' => ['DestinationRegion'],
+                            'CreateDBCluster' => ['DestinationRegion'],
+                            'StartDBInstanceAutomatedBackupsReplication' => ['DestinationRegion']
+                        ]
                     ]
                 ),
                 'rds.presigner'
