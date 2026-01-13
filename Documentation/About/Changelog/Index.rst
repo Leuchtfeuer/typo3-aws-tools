@@ -15,6 +15,7 @@ List of Versions
 .. toctree::
    :titlesonly:
 
+   12-0-2
    12-0-1
    12-0-0
    11-0-3
