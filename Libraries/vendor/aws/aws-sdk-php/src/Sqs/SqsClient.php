@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\UriResolver;
 use Psr\Http\Message\RequestInterface;
 
 /**
- * Client used to interact Amazon Simple Queue Service (Amazon SQS)
+ * Client used to interact with **Amazon Simple Queue Service (Amazon SQS)**.
  *
  * @method \Aws\Result addPermission(array $args = [])
  * @method \GuzzleHttp\Promise\Promise addPermissionAsync(array $args = [])
@@ -64,7 +64,6 @@ class SqsClient extends AwsClient
     {
         parent::__construct($config);
         $list = $this->getHandlerList();
-        $list->appendBuild($this->queueUrl(), 'sqs.queue_url');
         $list->appendSign($this->validateMd5(), 'sqs.md5');
     }
 
@@ -91,29 +90,6 @@ class SqsClient extends AwsClient
             $queueArn = substr_replace($queueArn, '.fifo', -5);
         }
         return $queueArn;
-    }
-
-    /**
-     * Moves the URI of the queue to the URI in the input parameter.
-     *
-     * @return callable
-     */
-    private function queueUrl()
-    {
-        return static function (callable $handler) {
-            return function (
-                CommandInterface $c,
-                RequestInterface $r = null
-            ) use ($handler) {
-                if ($c->hasParam('QueueUrl')) {
-                    $r = $r->withUri(UriResolver::resolve(
-                        $r->getUri(),
-                        new Uri($c['QueueUrl'])
-                    ));
-                }
-                return $handler($c, $r);
-            };
-        };
     }
 
     /**
@@ -193,7 +169,7 @@ class SqsClient extends AwsClient
         return static function (callable $handler) {
             return function (
                 CommandInterface $c,
-                RequestInterface $r = null
+                ?RequestInterface $r = null
             ) use ($handler) {
                 if ($c->getName() !== 'ReceiveMessage') {
                     return $handler($c, $r);
@@ -239,7 +215,7 @@ class SqsClient extends AwsClient
                                             ]
                                         );
                                     }
-                                } else if (isset($msg['MessageAttributes'])) {
+                                } else if (!empty($msg['MessageAttributes'])) {
                                     throw new SqsException(
                                         sprintf(
                                             'No Attribute MD5 found. Expected %s',
