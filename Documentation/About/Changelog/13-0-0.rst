@@ -1,0 +1,29 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 13.0.0 - 2026/01/15
+===========================
+
+* Add support for TYPO3 13
+* Drop support for TYPO3 12
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v13.0.0>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2026-01-15 [TASK] Update composer requirement for aws-sdk-php (Commit d2440f1 by engel)
+    2026-01-15 [TASK] Update external library aws-sdk-php (Commit 7c16936 by engel)
+    2025-05-09 [TASK] Simplify responsibility check in CDN event listener (Commit c4bf258 by engel)
+    2025-05-08 [TASK] Prevent CDN usage when not request and typoscript is available (Commit 10c72ee by engel)
+    2025-05-05 [TASK] Run rector and fractor (Commit 5ee3b34 by engel)
+    2025-04-29 [TASK] Migrate backend module invalidation controller (Commit ae8708f by engel)
+    2025-04-28 [TASK] Resolve deprecations (Commit f01f7db by engel)
+    2025-04-28 [TASK] Update library aws/aws-sdk-php (Commit a7732a3 by engel)
+    2025-04-28 [TASK] Initial commit for v13 (Commit cd5831e by engel)
