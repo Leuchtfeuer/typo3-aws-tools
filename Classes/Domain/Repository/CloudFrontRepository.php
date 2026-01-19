@@ -15,11 +15,8 @@ use TYPO3\CMS\Core\Http\Uri;
 
 class CloudFrontRepository
 {
-    protected CloudFrontClient $cloudFrontClient;
-
-    public function __construct(CloudFrontClient $cloudFrontClient)
+    public function __construct(protected CloudFrontClient $cloudFrontClient)
     {
-        $this->cloudFrontClient = $cloudFrontClient;
     }
 
     /**
@@ -52,7 +49,7 @@ class CloudFrontRepository
             $items = [$items];
         }
 
-        array_walk($items, function (&$item) {
+        array_walk($items, function (&$item): void {
             $item = '/' . ltrim((new Uri($item))->getPath(), '/');
             $item = trim($item);
         });

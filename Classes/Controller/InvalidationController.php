@@ -22,20 +22,14 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 
 class InvalidationController extends ActionController
 {
-    protected ModuleTemplateFactory $moduleTemplateFactory;
-
     protected array $distributions;
-
-    protected CloudFrontRepository $cloudFrontRepository;
 
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
-        CloudFrontRepository $cloudFrontRepository,
-        ModuleTemplateFactory $moduleTemplateFactory)
+        protected CloudFrontRepository $cloudFrontRepository,
+        protected ModuleTemplateFactory $moduleTemplateFactory)
     {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
-        $this->cloudFrontRepository = $cloudFrontRepository;
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
     public function indexAction(): ResponseInterface
@@ -53,7 +47,7 @@ class InvalidationController extends ActionController
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $moduleTemplate->assign('distributions', $distributions);
 
-        return $moduleTemplate->renderResponse();
+        return $moduleTemplate->renderResponse('Invalidation/Index');
     }
 
     public function invalidateAction(string $resourcePaths): ResponseInterface
