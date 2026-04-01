@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<guides xmlns="https://www.phpdoc.org/guides" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides ../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+        links-are-relative="true">
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+               project-home="https://github.com/Leuchtfeuer/typo3-aws-tools"
+               project-contact="mailto:dev@Leuchtfeuer.com"
+               project-repository="https://github.com/Leuchtfeuer/typo3-aws-tools"
+               project-issues="https://github.com/Leuchtfeuer/typo3-aws-tools/issues"
+               edit-on-github-branch="master"
+               edit-on-github="Leuchtfeuer/typo3-aws-tools"
+               interlink-shortcode="leuchtfeuer/aws-tools"
+               typo3-core-preferred="stable"/>
+    <project title="Amazon Web Services (AWS) Toolbox for TYPO3" release="1.0.0" copyright="since 2020 by the authors"/>
+</guides>
