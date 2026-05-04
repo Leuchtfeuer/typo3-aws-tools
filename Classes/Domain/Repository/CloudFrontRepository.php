@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Domain\Repository;
@@ -15,9 +17,7 @@ use TYPO3\CMS\Core\Http\Uri;
 
 class CloudFrontRepository
 {
-    public function __construct(protected CloudFrontClient $cloudFrontClient)
-    {
-    }
+    public function __construct(protected CloudFrontClient $cloudFrontClient) {}
 
     /**
      * This will list the past X ($maxItems) invalidation items for the given distribution ($distributionId).
@@ -31,7 +31,7 @@ class CloudFrontRepository
     {
         return $this->cloudFrontClient->listInvalidations([
             'DistributionId' => htmlentities($distribution),
-            'MaxItems' => $maxItems
+            'MaxItems' => $maxItems,
         ])->toArray();
     }
 

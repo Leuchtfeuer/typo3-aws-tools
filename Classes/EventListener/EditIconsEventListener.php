@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\EventListener;
@@ -49,7 +51,7 @@ class EditIconsEventListener implements SingletonInterface
                 'title' => $GLOBALS['LANG']->sL(sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:messages.invalid_resource_path.title', Constants::EXTENSION_KEY)),
                 'data-type' => $type,
                 'data-identifier' => $item->getIdentifier(),
-                'data-storage' => $item->getStorage()->getUid()
+                'data-storage' => $item->getStorage()->getUid(),
             ];
 
             /**

@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Factory;
@@ -37,7 +39,7 @@ class CloudFrontFactory implements SingletonInterface
             'credentials' => CredentialProvider::fromCredentials($credentials),
             'version' => Constants::VERSION,
             'region' => $extensionConfiguration->getRegion(),
-            'validation' => false
+            'validation' => false,
         ]);
 
         return static::$_client;

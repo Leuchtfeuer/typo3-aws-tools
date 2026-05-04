@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Controller;
@@ -15,10 +17,10 @@ use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 
 class InvalidationController extends ActionController
 {
@@ -27,8 +29,8 @@ class InvalidationController extends ActionController
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
         protected CloudFrontRepository $cloudFrontRepository,
-        protected ModuleTemplateFactory $moduleTemplateFactory)
-    {
+        protected ModuleTemplateFactory $moduleTemplateFactory
+    ) {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
     }
 

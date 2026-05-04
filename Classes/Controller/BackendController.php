@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Controller;
@@ -28,9 +30,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class BackendController implements SingletonInterface
 {
-    public function __construct(protected CloudFrontRepository $cloudFrontRepository)
-    {
-    }
+    public function __construct(protected CloudFrontRepository $cloudFrontRepository) {}
 
     public function invalidateAction(ServerRequestInterface $request): ResponseInterface
     {
@@ -45,7 +45,7 @@ class BackendController implements SingletonInterface
 
                 return new JsonResponse([
                     'message' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($identifier), implode(', ', $distributions)]),
-                    'title' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME)
+                    'title' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME),
                 ]);
             } catch (AwsException $exception) {
                 return new JsonResponse(['message' => $exception->getAwsErrorMessage()], 500);
