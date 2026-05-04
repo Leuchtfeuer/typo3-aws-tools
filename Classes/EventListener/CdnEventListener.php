@@ -93,8 +93,12 @@ class CdnEventListener implements SingletonInterface
 
         $driver = $event->getDriver();
         if ($driver instanceof AbstractHierarchicalFilesystemDriver && $resource instanceof FileInterface) {
+            $identifier = $resource->getIdentifier();
+            if ($identifier === '') {
+                return;
+            }
             // @extensionScannerIgnoreLine
-            $publicUrl = $driver->getPublicUrl($resource->getIdentifier());
+            $publicUrl = $driver->getPublicUrl($identifier);
             $event->setPublicUrl($this->host . $publicUrl);
         }
     }

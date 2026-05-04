@@ -24,6 +24,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class InvalidationController extends ActionController
 {
+    /** @var string[] */
     protected array $distributions;
 
     public function __construct(
@@ -60,8 +61,8 @@ class InvalidationController extends ActionController
                 $paths = implode(', ', $result['Invalidation']['InvalidationBatch']['Paths']['Items'] ?? []);
 
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($paths), $distribution]),
-                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME),
+                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($paths), $distribution]) ?? '',
+                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME) ?? '',
                     ContextualFeedbackSeverity::OK
                 );
             } catch (AwsException $exception) {
@@ -78,13 +79,14 @@ class InvalidationController extends ActionController
         bool $storeInSession = true
     ): void {
         $this->addFlashMessage(
-            $exception->getAwsErrorMessage(),
-            LocalizationUtility::translate($exception->getAwsErrorCode(), Constants::EXTENSION_NAME) ?? $exception->getAwsErrorCode(),
+            $exception->getAwsErrorMessage() ?? '',
+            LocalizationUtility::translate($exception->getAwsErrorCode() ?? '', Constants::EXTENSION_NAME) ?? $exception->getAwsErrorCode() ?? '',
             $severity,
             $storeInSession
         );
     }
 
+    /** @return string[] */
     protected function clearResourcePaths(string $paths): array
     {
         $resourcePaths = [];
@@ -94,8 +96,8 @@ class InvalidationController extends ActionController
                 $resourcePaths[] = $path;
             } else {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]),
-                    LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME),
+                    LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]) ?? '',
+                    LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME) ?? '',
                     ContextualFeedbackSeverity::WARNING
                 );
             }

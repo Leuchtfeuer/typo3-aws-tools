@@ -21,7 +21,11 @@ class ContentReplaceMiddleware implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $language = $request->getAttribute('language')->toArray();
+        $siteLanguage = $request->getAttribute('language');
+        if ($siteLanguage === null) {
+            return $handler->handle($request);
+        }
+        $language = $siteLanguage->toArray();
         $response = $handler->handle($request);
         $config = $GLOBALS['TSFE']->config['config']['tx_awstools.'] ?? [];
 
@@ -42,7 +46,7 @@ class ContentReplaceMiddleware implements MiddlewareInterface
             $body = $response->getBody();
             $body->rewind();
             $contents = $response->getBody()->getContents();
-            $content = preg_replace($patterns, $replacements, $contents);
+            $content = preg_replace($patterns, $replacements, $contents) ?? $contents;
             $body = new Stream('php://temp', 'rw');
             $body->write($content);
             $response = $response->withBody($body);

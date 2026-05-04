@@ -25,6 +25,7 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
 {
     use LoggerAwareTrait;
 
+    /** @var string[] */
     private array $distributions;
 
     public function __construct(ExtensionConfiguration $extensionConfiguration, private CloudFrontRepository $cloudFrontRepository)
@@ -32,7 +33,7 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
     }
 
-    public function invalidateOnBackendUploadReplace(BeforeFileReplacedEvent $event)
+    public function invalidateOnBackendUploadReplace(BeforeFileReplacedEvent $event): void
     {
         $this->invalidatePath($event->getFile()->getPublicUrl());
     }
@@ -47,13 +48,17 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
         $this->invalidatePath($event->getFile()->getPublicUrl());
     }
 
-    private function invalidatePath($path): void
+    private function invalidatePath(?string $path): void
     {
+        if ($path === null) {
+            return;
+        }
+
         try {
             $this->cloudFrontRepository->createBatchInvalidation($this->distributions, $path);
         } catch (CloudFrontException $exception) {
             // @extensionScannerIgnoreLine
-            $this->logger->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
+            $this->logger?->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
         }
     }
 }

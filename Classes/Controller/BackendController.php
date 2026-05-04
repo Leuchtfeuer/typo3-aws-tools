@@ -37,7 +37,7 @@ class BackendController implements SingletonInterface
         $data = json_decode($request->getBody()->getContents(), true);
         $item = $this->getItem($data);
 
-        if ($this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
+        if ($item !== null && $this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
             try {
                 $identifier = '/' . ltrim($identifier, '/');
                 $distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
@@ -55,7 +55,8 @@ class BackendController implements SingletonInterface
         return new JsonResponse(['message' => 'An unknown error occurred.'], 500);
     }
 
-    protected function getItem(array $data): ?ResourceInterface
+    /** @param array<string, mixed> $data */
+    protected function getItem(array $data): FileInterface|FolderInterface|null
     {
         return match ($data['type']) {
             'Folder' => $this->getFolder($data['identifier'], (int)$data['storage']),
@@ -70,7 +71,7 @@ class BackendController implements SingletonInterface
             ->getFolderObjectFromCombinedIdentifier(sprintf('%d:%s', $storage, $identifier));
     }
 
-    protected function getFile(string $identifier, int $storage): FileInterface
+    protected function getFile(string $identifier, int $storage): ?FileInterface
     {
         return GeneralUtility::makeInstance(ResourceFactory::class)
             ->getFileObjectByStorageAndIdentifier($storage, $identifier);

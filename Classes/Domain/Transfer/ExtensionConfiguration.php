@@ -40,6 +40,7 @@ class ExtensionConfiguration implements SingletonInterface
         }
     }
 
+    /** @param array<string, string> $configuration */
     protected function setPropertiesFromConfiguration(array $configuration): void
     {
         foreach ($configuration as $key => $value) {
@@ -49,6 +50,7 @@ class ExtensionConfiguration implements SingletonInterface
         }
     }
 
+    /** @return string[] */
     public function getCloudFrontDistributions(): array
     {
         return GeneralUtility::trimExplode(',', $this->cloudFrontDistributions, true);

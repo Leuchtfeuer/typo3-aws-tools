@@ -27,6 +27,7 @@ class InvalidationCommand extends Command
 
     private CloudFrontRepository $cloudFrontRepository;
 
+    /** @var string[] */
     private array $distributions = [];
 
     protected function configure(): void

@@ -25,7 +25,7 @@ class CloudFrontRepository
      * @param string $distribution The ID of the distributions to fetch invalidations from
      * @param int $maxItems Maximum amount of entries to fetch
      *
-     * @return array The response of the webservice
+     * @return array<string, mixed> The response of the webservice
      */
     public function findInvalidationsByDistribution(string $distribution, int $maxItems = 10): array
     {
@@ -41,7 +41,7 @@ class CloudFrontRepository
      * @param string $distribution The ID of the distribution in which the specified item(s) should be invalidated
      * @param string|string[] $items Array of file paths to be invalidated (or a single path)
      *
-     * @return array The response of the webservice
+     * @return array<string, mixed> The response of the webservice
      */
     public function createInvalidation(string $distribution, $items): array
     {
@@ -69,10 +69,10 @@ class CloudFrontRepository
     /**
      * This will create invalidations of an array of file paths (or a single path) in the given distributions.
      *
-     * @param array $distributions The IDs of the distributions in which the specified item(s) should be invalidated
+     * @param string[] $distributions The IDs of the distributions in which the specified item(s) should be invalidated
      * @param string|string[] $items Array of file paths to be invalidated (or a single path)
      *
-     * @return array An array of responses of the webservice
+     * @return array<string, array<string, mixed>> An array of responses of the webservice
      */
     public function createBatchInvalidation(array $distributions, $items): array
     {

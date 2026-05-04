@@ -38,6 +38,7 @@ class FilePermissions
         $GLOBALS['TCA'][$tableName]['columns']['file_permissions']['config']['size'] = $itemCount;
     }
 
+    /** @return array<string, array{label: string, value: string, icon: string}> */
     protected static function getFilePermissions(): array
     {
         return [
