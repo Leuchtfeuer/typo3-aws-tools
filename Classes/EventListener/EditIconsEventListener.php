@@ -23,8 +23,10 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent;
 
-class EditIconsEventListener implements SingletonInterface
+readonly class EditIconsEventListener implements SingletonInterface
 {
+    public function __construct(private UriBuilder $uriBuilder, private IconFactory $iconFactory) {}
+
     /**
      * @throws RouteNotFoundException
      */
@@ -42,26 +44,18 @@ class EditIconsEventListener implements SingletonInterface
                 $identifier .= '*';
             }
 
-            /**
-             * @var UriBuilder $uriBuilder
-             */
-            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $attributes = [
-                'href' => (string)$uriBuilder->buildUriFromRoute('ajax_awstools_invalidate', ['identifier' => $identifier]),
+                'href' => (string)$this->uriBuilder->buildUriFromRoute('ajax_awstools_invalidate', ['identifier' => $identifier]),
                 'title' => $GLOBALS['LANG']->sL(sprintf('LLL:EXT:%s/Resources/Private/Language/locallang.xlf:messages.invalid_resource_path.title', Constants::EXTENSION_KEY)),
                 'data-type' => $type,
                 'data-identifier' => $item->getIdentifier(),
                 'data-storage' => $item->getStorage()->getUid(),
             ];
 
-            /**
-             * @var IconFactory $iconFactory
-             */
-            $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
             $actionItems['awstools_invalidate'] = sprintf(
                 '<a class="btn btn-default c-awstools__invalidate" %s>%s</a>',
                 GeneralUtility::implodeAttributes($attributes, true),
-                $iconFactory->getIcon('actions-bolt', IconSize::SMALL)->render()
+                $this->iconFactory->getIcon('actions-bolt', IconSize::SMALL)->render()
             );
         }
 

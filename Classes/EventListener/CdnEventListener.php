@@ -28,7 +28,7 @@ class CdnEventListener implements SingletonInterface
 
     protected string $host = '';
 
-    public function __construct()
+    public function __construct(private readonly OnlineMediaHelperRegistry $onlineMediaHelperRegistry)
     {
         $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         if (empty($request) || ApplicationType::fromRequest($request)->isFrontend()) {
@@ -72,7 +72,7 @@ class CdnEventListener implements SingletonInterface
                 ) {
                     $this->responsible = true;
                 }
-            } catch (\Exception $exception) {
+            } catch (\Exception) {
                 $this->responsible = false;
             }
 
@@ -87,7 +87,7 @@ class CdnEventListener implements SingletonInterface
         $resource = $event->getResource();
 
         if (!$this->responsible
-            || ($resource instanceof File && GeneralUtility::makeInstance(OnlineMediaHelperRegistry::class)->getOnlineMediaHelper($resource) !== false)) {
+            || ($resource instanceof File && $this->onlineMediaHelperRegistry->getOnlineMediaHelper($resource) !== false)) {
             return;
         }
 

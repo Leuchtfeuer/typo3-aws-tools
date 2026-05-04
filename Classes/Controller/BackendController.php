@@ -28,9 +28,13 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-class BackendController implements SingletonInterface
+readonly class BackendController implements SingletonInterface
 {
-    public function __construct(protected CloudFrontRepository $cloudFrontRepository) {}
+    public function __construct(
+        private CloudFrontRepository $cloudFrontRepository,
+        private ResourceFactory $resourceFactory,
+        private Context $context
+    ) {}
 
     public function invalidateAction(ServerRequestInterface $request): ResponseInterface
     {
@@ -67,13 +71,13 @@ class BackendController implements SingletonInterface
 
     protected function getFolder(string $identifier, int $storage): Folder
     {
-        return GeneralUtility::makeInstance(ResourceFactory::class)
+        return $this->resourceFactory
             ->getFolderObjectFromCombinedIdentifier(sprintf('%d:%s', $storage, $identifier));
     }
 
     protected function getFile(string $identifier, int $storage): ?FileInterface
     {
-        return GeneralUtility::makeInstance(ResourceFactory::class)
+        return $this->resourceFactory
             ->getFileObjectByStorageAndIdentifier($storage, $identifier);
     }
 
@@ -82,7 +86,7 @@ class BackendController implements SingletonInterface
         try {
             return
                 $item instanceof \TYPO3\CMS\Core\Resource\ResourceInterface
-                && GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('backend.user', 'isLoggedIn')
+                && $this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')
                 && $item->getStorage()->checkUserActionPermission('invalidate', $type);
         } catch (AspectNotFoundException) {
             return false;

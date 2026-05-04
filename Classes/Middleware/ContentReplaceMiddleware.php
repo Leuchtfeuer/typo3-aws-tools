@@ -27,13 +27,13 @@ class ContentReplaceMiddleware implements MiddlewareInterface
         }
         $language = $siteLanguage->toArray();
         $response = $handler->handle($request);
-        $config = $GLOBALS['TSFE']->config['config']['tx_awstools.'] ?? [];
+        $config = $request->getAttribute('frontend.typoscript')->getConfigArray()['tx_awstools.'] ?? [];
 
         if (empty($config['enabled']) || filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host']) || $config['replacer.']['middleware'] !== '1') {
             return $response;
         }
 
-        $host = rtrim($language['awstools_cdn_host'], '/');
+        $host = rtrim((string)$language['awstools_cdn_host'], '/');
         $patterns = [];
         $replacements = [];
 
