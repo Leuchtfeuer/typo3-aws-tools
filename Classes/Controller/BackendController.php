@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Resource\FileInterface;
-use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -56,7 +56,7 @@ class BackendController implements SingletonInterface
     }
 
     /** @param array<string, mixed> $data */
-    protected function getItem(array $data): FileInterface|FolderInterface|null
+    protected function getItem(array $data): FileInterface|Folder|null
     {
         return match ($data['type']) {
             'Folder' => $this->getFolder($data['identifier'], (int)$data['storage']),
@@ -65,7 +65,7 @@ class BackendController implements SingletonInterface
         };
     }
 
-    protected function getFolder(string $identifier, int $storage): FolderInterface
+    protected function getFolder(string $identifier, int $storage): Folder
     {
         return GeneralUtility::makeInstance(ResourceFactory::class)
             ->getFolderObjectFromCombinedIdentifier(sprintf('%d:%s', $storage, $identifier));
