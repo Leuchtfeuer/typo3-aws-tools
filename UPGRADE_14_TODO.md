@@ -183,7 +183,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Issue**: `Classes/EventListener/EditIconsEventListener.php` and `Configuration/Services.yaml` reference `TYPO3\CMS\Filelist\Event\ProcessFileListActionsEvent`, but the extension does not declare `typo3/cms-filelist` in its `composer.json` `require` section. The class only loads if another package pulls in `typo3/cms-filelist`. With the rework of the action API in TYPO3 14 (Breaking-107884) the dependency must be explicit.
 
-- [ ] Add `"typo3/cms-filelist": "^14.0"` to `composer.json` `require`
+- [x] Add `"typo3/cms-filelist": "^14.3"` to `composer.json` `require`
 
 ---
 
@@ -192,7 +192,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Issue**: `composer.json` does not declare a `php` constraint. TYPO3 14 requires PHP 8.3 or higher. While the platform indirectly enforces this, an explicit constraint avoids accidental installation on unsupported PHP versions.
 
-- [ ] Add `"php": "^8.3 || ^8.4"` to `composer.json` `require`
+- [x] Add `"php": "^8.3 || ^8.4"` to `composer.json` `require`
 
 ---
 

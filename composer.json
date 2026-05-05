@@ -26,14 +26,16 @@
     },
     "config": {
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         }
     },
     "require": {
+        "php": "^8.3 || ^8.4",
         "aws/aws-sdk-php": "^3.149",
         "typo3/cms-backend": "^14.3",
         "typo3/cms-core": "^14.3",
-        "typo3/cms-extbase": "^14.3"
+        "typo3/cms-extbase": "^14.3",
+        "typo3/cms-filelist": "^14.3"
     },
     "replace": {
         "typo3-ter/aws-tools": "self.version"
