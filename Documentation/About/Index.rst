@@ -18,12 +18,14 @@ Compatibility
 We are currently supporting following TYPO3 versions:
 
 .. csv-table:: Version Matrix
-   :header: "Extension Version", "TYPO3 v12 Support", "TYPO3 v11 Support", "TYPO3 v10 Support"
+   :header: "Extension Version", "TYPO3 v14 Support", "TYPO3 v13 Support", "TYPO3 v12 Support", "TYPO3 v11 Support", "TYPO3 v10 Support"
    :align: center
 
-        "12.x", "yes", "no", "no"
-        "11.x", "no", "yes", "no"
-        "10.x", "no", "no", "yes"
+        "14.x", "yes", "no", "no", "no", "no"
+        "13.x", "no", "yes", "no", "no", "no"
+        "12.x", "no", "no", "yes", "no", "no"
+        "11.x", "no", "no", "no", "yes", "no"
+        "10.x", "no", "no", "no", "no", "yes"
 
 .. _about-aboutAmazonCloudFront:
 
