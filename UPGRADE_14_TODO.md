@@ -82,7 +82,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Breaking-107943
 
-- [ ] Remove `'before' => ['typo3/cms-frontend/output-compression']` from `RequestMiddlewares.php` (or replace with a still-existing middleware if ordering is still needed)
+- [x] Remove `'before' => ['typo3/cms-frontend/output-compression']` from `RequestMiddlewares.php`
 
 ---
 

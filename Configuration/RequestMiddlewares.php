@@ -9,9 +9,6 @@ return [
             'after' => [
                 'typo3/cms-frontend/content-length-headers',
             ],
-            'before' => [
-                'typo3/cms-frontend/output-compression',
-            ],
         ],
     ],
 ];
