@@ -150,7 +150,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Breaking-108304
 
-- [ ] Update `"description"` to `"AWS Tools - This extension connects your TYPO3 instance to Amazon CloudFront..."` (title before ` - `, description after)
+- [x] Update `"description"` to `"Amazon Web Services (AWS) Toolbox - This extension connects your TYPO3 instance to Amazon CloudFront..."` (title before ` - `, description after)
 
 ---
 
