@@ -25,12 +25,12 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class InvalidationController extends ActionController
 {
     /** @var string[] */
-    protected array $distributions;
+    protected readonly array $distributions;
 
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
-        protected CloudFrontRepository $cloudFrontRepository,
-        protected ModuleTemplateFactory $moduleTemplateFactory
+        private readonly CloudFrontRepository $cloudFrontRepository,
+        private readonly ModuleTemplateFactory $moduleTemplateFactory
     ) {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
     }

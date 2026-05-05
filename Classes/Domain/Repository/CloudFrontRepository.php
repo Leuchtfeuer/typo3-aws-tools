@@ -15,7 +15,7 @@ use Aws\CloudFront\CloudFrontClient;
 use Leuchtfeuer\AwsTools\Constants;
 use TYPO3\CMS\Core\Http\Uri;
 
-class CloudFrontRepository
+readonly class CloudFrontRepository
 {
     public function __construct(protected CloudFrontClient $cloudFrontClient) {}
 

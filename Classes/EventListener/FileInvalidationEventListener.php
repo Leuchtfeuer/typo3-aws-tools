@@ -26,10 +26,12 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
     use LoggerAwareTrait;
 
     /** @var string[] */
-    private array $distributions;
+    private readonly array $distributions;
 
-    public function __construct(ExtensionConfiguration $extensionConfiguration, private CloudFrontRepository $cloudFrontRepository)
-    {
+    public function __construct(
+        ExtensionConfiguration $extensionConfiguration,
+        private readonly CloudFrontRepository $cloudFrontRepository
+    ) {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
     }
 

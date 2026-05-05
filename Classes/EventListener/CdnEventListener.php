@@ -14,6 +14,7 @@ namespace Leuchtfeuer\AwsTools\EventListener;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
 use TYPO3\CMS\Core\Resource\File;
@@ -31,7 +32,10 @@ class CdnEventListener implements SingletonInterface
 
     private string $host = '';
 
-    public function __construct(private readonly OnlineMediaHelperRegistry $onlineMediaHelperRegistry) {}
+    public function __construct(
+        private readonly ConfigurationManagerInterface $configurationManager,
+        private readonly OnlineMediaHelperRegistry $onlineMediaHelperRegistry
+    ) {}
 
     public function onResourceStorageEmitPreGeneratePublicUrlSignal(GeneratePublicUrlForResourceEvent $event): void
     {
@@ -63,14 +67,14 @@ class CdnEventListener implements SingletonInterface
         $this->initialized = true;
 
         $request = $this->resolveRequest();
-        if ($request === null || !ApplicationType::fromRequest($request)->isFrontend()) {
+        if (!$request instanceof ServerRequestInterface || !ApplicationType::fromRequest($request)->isFrontend()) {
             return;
         }
 
         $language = $this->resolveLanguage($request);
 
         try {
-            $typoscript = GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
+            $typoscript = $this->configurationManager
                 ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 
             $config = $typoscript['config']['tx_awstools.'] ?? [];
@@ -105,6 +109,7 @@ class CdnEventListener implements SingletonInterface
         // Fallback: resolve language from site configuration using the request URI
         /** @var SiteConfiguration $siteConfiguration */
         $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
+        /** @var NormalizedParams $normalizedParams */
         $normalizedParams = $request->getAttribute('normalizedParams');
         $calledBaseUri = $normalizedParams !== null
             ? rtrim($normalizedParams->getRequestDir(), '/')
