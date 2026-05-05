@@ -68,10 +68,9 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Breaking-107884
 
-- [ ] Refactor `manipulateEditIcons()` to use `ComponentFactory` for button creation instead of building raw HTML strings
-- [ ] Inject `ComponentFactory` via constructor DI
-- [ ] Get table/type via `$record->getMainType()` if applicable (check updated API)
-- [ ] Verify `$event->getActionItems()` / `$event->setActionItems()` signatures have not changed further
+- [x] Refactor `manipulateEditIcons()` to use `ComponentFactory` for button creation instead of building raw HTML strings
+- [x] Inject `ComponentFactory` via constructor DI
+- [x] Replace `$event->getActionItems()` / `$event->setActionItems()` with new `$event->setAction()` API using `ActionGroup` enum
 
 ---
 
