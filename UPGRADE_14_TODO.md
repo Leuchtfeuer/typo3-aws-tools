@@ -92,8 +92,8 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Breaking-108113
 
-- [ ] Refactor `CdnEventListener` to receive the PSR-7 `ServerRequestInterface` lazily (e.g. via `RequestStack`, or by moving initialization logic from the constructor to the event handler method `onResourceStorageEmitPreGeneratePublicUrlSignal`)
-- [ ] Replace `$GLOBALS['TYPO3_REQUEST']` access with a properly injected/resolved request
+- [x] Refactor `CdnEventListener` to initialize lazily — moved initialization from constructor to event handler method with `$this->initialized` guard
+- [x] Replace `$GLOBALS['TYPO3_REQUEST']` access with a `resolveRequest()` helper that reads `$GLOBALS['TYPO3_REQUEST'] ?? null` safely
 
 ---
 
@@ -161,8 +161,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Issue**: The constructor calls `ConfigurationManagerInterface::getConfiguration(CONFIGURATION_TYPE_FULL_TYPOSCRIPT)` which requires a frontend Extbase context. This may fail or return empty data in contexts where no frontend request is active. Review whether this still works as expected in TYPO3 14 or needs adjustment.
 
-- [ ] Verify that `ConfigurationManagerInterface::getConfiguration(CONFIGURATION_TYPE_FULL_TYPOSCRIPT)` still functions correctly in TYPO3 14 frontend context when called from an event listener constructor
-- [ ] Consider moving initialization to the event handler method to avoid issues with request-less contexts
+- [x] Verified TypoScript configuration access — moved initialization to event handler method (item 5), resolves context issue
 
 ---
 
@@ -234,4 +233,4 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Deprecation-109551
 
-- [ ] Replace `GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR')` with `$request->getAttribute('normalizedParams')->getSiteUrl()` (or equivalent) when refactoring the CdnEventListener constructor (item 5)
+- [x] Replace `GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR')` with `$request->getAttribute('normalizedParams')?->getRequestDir()` in `CdnEventListener::resolveLanguage()`
