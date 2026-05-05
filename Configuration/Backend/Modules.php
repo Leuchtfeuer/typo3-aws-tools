@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'awstools' => [
-        'parent' => 'tools',
+        'parent' => 'system',
         'position' => 'bottom',
         'access' => 'admin',
         'workspaces' => 'live',
