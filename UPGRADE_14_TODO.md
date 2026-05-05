@@ -105,7 +105,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Important-107735
 
-- [ ] Replace `$this->resourceFactory->getFileObjectByStorageAndIdentifier($storage, $identifier)` with the equivalent `StorageRepository`/`ResourceStorage` call (e.g. `$storageRepository->findByUid($storage)->getFile($identifier)`)
+- [x] Replace `$this->resourceFactory->getFileObjectByStorageAndIdentifier($storage, $identifier)` with `$this->storageRepository->findByUid($storage)?->getFile($identifier)`
 
 ---
 
@@ -174,7 +174,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Important-107735
 
-- [ ] Check whether `ResourceFactory::getFolderObjectFromCombinedIdentifier()` still exists in TYPO3 14 and replace with `StorageRepository`/`ResourceStorage` equivalent if removed
+- [x] Check whether `ResourceFactory::getFolderObjectFromCombinedIdentifier()` still exists in TYPO3 14 — confirmed still present, no migration needed
 
 ---
 
