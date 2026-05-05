@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Controller;
@@ -19,25 +21,27 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Resource\FileInterface;
-use TYPO3\CMS\Core\Resource\FolderInterface;
+use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-class BackendController implements SingletonInterface
+readonly class BackendController implements SingletonInterface
 {
-    public function __construct(protected CloudFrontRepository $cloudFrontRepository)
-    {
-    }
+    public function __construct(
+        private CloudFrontRepository $cloudFrontRepository,
+        private ResourceFactory $resourceFactory,
+        private Context $context
+    ) {}
 
     public function invalidateAction(ServerRequestInterface $request): ResponseInterface
     {
         $data = json_decode($request->getBody()->getContents(), true);
         $item = $this->getItem($data);
 
-        if ($this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
+        if ($item !== null && $this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
             try {
                 $identifier = '/' . ltrim($identifier, '/');
                 $distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
@@ -45,7 +49,7 @@ class BackendController implements SingletonInterface
 
                 return new JsonResponse([
                     'message' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($identifier), implode(', ', $distributions)]),
-                    'title' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME)
+                    'title' => LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME),
                 ]);
             } catch (AwsException $exception) {
                 return new JsonResponse(['message' => $exception->getAwsErrorMessage()], 500);
@@ -55,7 +59,8 @@ class BackendController implements SingletonInterface
         return new JsonResponse(['message' => 'An unknown error occurred.'], 500);
     }
 
-    protected function getItem(array $data): ?ResourceInterface
+    /** @param array<string, mixed> $data */
+    protected function getItem(array $data): FileInterface|Folder|null
     {
         return match ($data['type']) {
             'Folder' => $this->getFolder($data['identifier'], (int)$data['storage']),
@@ -64,15 +69,15 @@ class BackendController implements SingletonInterface
         };
     }
 
-    protected function getFolder(string $identifier, int $storage): FolderInterface
+    protected function getFolder(string $identifier, int $storage): Folder
     {
-        return GeneralUtility::makeInstance(ResourceFactory::class)
+        return $this->resourceFactory
             ->getFolderObjectFromCombinedIdentifier(sprintf('%d:%s', $storage, $identifier));
     }
 
-    protected function getFile(string $identifier, int $storage): FileInterface
+    protected function getFile(string $identifier, int $storage): ?FileInterface
     {
-        return GeneralUtility::makeInstance(ResourceFactory::class)
+        return $this->resourceFactory
             ->getFileObjectByStorageAndIdentifier($storage, $identifier);
     }
 
@@ -81,7 +86,7 @@ class BackendController implements SingletonInterface
         try {
             return
                 $item instanceof \TYPO3\CMS\Core\Resource\ResourceInterface
-                && GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('backend.user', 'isLoggedIn')
+                && $this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')
                 && $item->getStorage()->checkUserActionPermission('invalidate', $type);
         } catch (AspectNotFoundException) {
             return false;

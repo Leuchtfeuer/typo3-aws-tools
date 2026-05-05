@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Domain\Repository;
@@ -15,9 +17,7 @@ use TYPO3\CMS\Core\Http\Uri;
 
 class CloudFrontRepository
 {
-    public function __construct(protected CloudFrontClient $cloudFrontClient)
-    {
-    }
+    public function __construct(protected CloudFrontClient $cloudFrontClient) {}
 
     /**
      * This will list the past X ($maxItems) invalidation items for the given distribution ($distributionId).
@@ -25,13 +25,13 @@ class CloudFrontRepository
      * @param string $distribution The ID of the distributions to fetch invalidations from
      * @param int $maxItems Maximum amount of entries to fetch
      *
-     * @return array The response of the webservice
+     * @return array<string, mixed> The response of the webservice
      */
     public function findInvalidationsByDistribution(string $distribution, int $maxItems = 10): array
     {
         return $this->cloudFrontClient->listInvalidations([
             'DistributionId' => htmlentities($distribution),
-            'MaxItems' => $maxItems
+            'MaxItems' => $maxItems,
         ])->toArray();
     }
 
@@ -41,7 +41,7 @@ class CloudFrontRepository
      * @param string $distribution The ID of the distribution in which the specified item(s) should be invalidated
      * @param string|string[] $items Array of file paths to be invalidated (or a single path)
      *
-     * @return array The response of the webservice
+     * @return array<string, mixed> The response of the webservice
      */
     public function createInvalidation(string $distribution, $items): array
     {
@@ -69,10 +69,10 @@ class CloudFrontRepository
     /**
      * This will create invalidations of an array of file paths (or a single path) in the given distributions.
      *
-     * @param array $distributions The IDs of the distributions in which the specified item(s) should be invalidated
+     * @param string[] $distributions The IDs of the distributions in which the specified item(s) should be invalidated
      * @param string|string[] $items Array of file paths to be invalidated (or a single path)
      *
-     * @return array An array of responses of the webservice
+     * @return array<string, array<string, mixed>> An array of responses of the webservice
      */
     public function createBatchInvalidation(array $distributions, $items): array
     {

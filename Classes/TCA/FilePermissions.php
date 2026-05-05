@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\TCA;
@@ -36,6 +40,7 @@ class FilePermissions
         $GLOBALS['TCA'][$tableName]['columns']['file_permissions']['config']['size'] = $itemCount;
     }
 
+    /** @return array<string, array{label: string, value: string, icon: string}> */
     protected static function getFilePermissions(): array
     {
         return [

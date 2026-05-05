@@ -24,6 +24,11 @@
             "Leuchtfeuer\\AwsTools\\": "Classes/"
         }
     },
+    "config": {
+        "platform": {
+            "php": "8.2"
+        }
+    },
     "require": {
         "aws/aws-sdk-php": "^3.149",
         "typo3/cms-backend": "^13.4",

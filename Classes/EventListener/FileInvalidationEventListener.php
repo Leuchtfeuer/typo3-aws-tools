@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\EventListener;
@@ -23,6 +25,7 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
 {
     use LoggerAwareTrait;
 
+    /** @var string[] */
     private array $distributions;
 
     public function __construct(ExtensionConfiguration $extensionConfiguration, private CloudFrontRepository $cloudFrontRepository)
@@ -30,7 +33,7 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
     }
 
-    public function invalidateOnBackendUploadReplace(BeforeFileReplacedEvent $event)
+    public function invalidateOnBackendUploadReplace(BeforeFileReplacedEvent $event): void
     {
         $this->invalidatePath($event->getFile()->getPublicUrl());
     }
@@ -45,13 +48,17 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
         $this->invalidatePath($event->getFile()->getPublicUrl());
     }
 
-    private function invalidatePath($path): void
+    private function invalidatePath(?string $path): void
     {
+        if ($path === null) {
+            return;
+        }
+
         try {
             $this->cloudFrontRepository->createBatchInvalidation($this->distributions, $path);
         } catch (CloudFrontException $exception) {
             // @extensionScannerIgnoreLine
-            $this->logger->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
+            $this->logger?->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
         }
     }
 }

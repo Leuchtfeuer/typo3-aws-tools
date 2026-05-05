@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Controller;
@@ -15,20 +17,21 @@ use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 
 class InvalidationController extends ActionController
 {
+    /** @var string[] */
     protected array $distributions;
 
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
         protected CloudFrontRepository $cloudFrontRepository,
-        protected ModuleTemplateFactory $moduleTemplateFactory)
-    {
+        protected ModuleTemplateFactory $moduleTemplateFactory
+    ) {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
     }
 
@@ -58,8 +61,8 @@ class InvalidationController extends ActionController
                 $paths = implode(', ', $result['Invalidation']['InvalidationBatch']['Paths']['Items'] ?? []);
 
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($paths), $distribution]),
-                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME),
+                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.body', Constants::EXTENSION_NAME, [urldecode($paths), $distribution]) ?? '',
+                    LocalizationUtility::translate('messages.cloudfront_invalidation_success.title', Constants::EXTENSION_NAME) ?? '',
                     ContextualFeedbackSeverity::OK
                 );
             } catch (AwsException $exception) {
@@ -76,13 +79,14 @@ class InvalidationController extends ActionController
         bool $storeInSession = true
     ): void {
         $this->addFlashMessage(
-            $exception->getAwsErrorMessage(),
-            LocalizationUtility::translate($exception->getAwsErrorCode(), Constants::EXTENSION_NAME) ?? $exception->getAwsErrorCode(),
+            $exception->getAwsErrorMessage() ?? '',
+            LocalizationUtility::translate($exception->getAwsErrorCode() ?? '', Constants::EXTENSION_NAME) ?? $exception->getAwsErrorCode() ?? '',
             $severity,
             $storeInSession
         );
     }
 
+    /** @return string[] */
     protected function clearResourcePaths(string $paths): array
     {
         $resourcePaths = [];
@@ -92,8 +96,8 @@ class InvalidationController extends ActionController
                 $resourcePaths[] = $path;
             } else {
                 $this->addFlashMessage(
-                    LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]),
-                    LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME),
+                    LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]) ?? '',
+                    LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME) ?? '',
                     ContextualFeedbackSeverity::WARNING
                 );
             }

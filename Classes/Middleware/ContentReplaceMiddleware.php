@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\Middleware;
@@ -19,15 +21,19 @@ class ContentReplaceMiddleware implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $language = $request->getAttribute('language')->toArray();
+        $siteLanguage = $request->getAttribute('language');
+        if ($siteLanguage === null) {
+            return $handler->handle($request);
+        }
+        $language = $siteLanguage->toArray();
         $response = $handler->handle($request);
-        $config = $GLOBALS['TSFE']->config['config']['tx_awstools.'] ?? [];
+        $config = $request->getAttribute('frontend.typoscript')?->getConfigArray()['tx_awstools.'] ?? [];
 
         if (empty($config['enabled']) || filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host']) || $config['replacer.']['middleware'] !== '1') {
             return $response;
         }
 
-        $host = rtrim($language['awstools_cdn_host'], '/');
+        $host = rtrim((string)$language['awstools_cdn_host'], '/');
         $patterns = [];
         $replacements = [];
 
@@ -40,7 +46,7 @@ class ContentReplaceMiddleware implements MiddlewareInterface
             $body = $response->getBody();
             $body->rewind();
             $contents = $response->getBody()->getContents();
-            $content = preg_replace($patterns, $replacements, $contents);
+            $content = preg_replace($patterns, $replacements, $contents) ?? $contents;
             $body = new Stream('php://temp', 'rw');
             $body->write($content);
             $response = $response->withBody($body);

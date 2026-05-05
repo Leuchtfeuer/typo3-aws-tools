@@ -1,10 +1,12 @@
 <?php
 
 /*
- * This file is part of the "AWS Tools" extension for TYPO3 CMS.
+ * This file is part of the "AWS Tools" extension.
+ *
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
- * <dev@Leuchtfeuer.com>, Leuchtfeuer Digital Marketing
+ *
+ * (c) Leuchtfeuer Digital Marketing <dev@Leuchtfeuer.com>
  */
 
 namespace Leuchtfeuer\AwsTools\EventListener;
@@ -26,7 +28,7 @@ class CdnEventListener implements SingletonInterface
 
     protected string $host = '';
 
-    public function __construct()
+    public function __construct(private readonly OnlineMediaHelperRegistry $onlineMediaHelperRegistry)
     {
         $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         if (empty($request) || ApplicationType::fromRequest($request)->isFrontend()) {
@@ -70,7 +72,7 @@ class CdnEventListener implements SingletonInterface
                 ) {
                     $this->responsible = true;
                 }
-            } catch (\Exception $exception) {
+            } catch (\Exception) {
                 $this->responsible = false;
             }
 
@@ -85,14 +87,18 @@ class CdnEventListener implements SingletonInterface
         $resource = $event->getResource();
 
         if (!$this->responsible
-            || ($resource instanceof File && GeneralUtility::makeInstance(OnlineMediaHelperRegistry::class)->getOnlineMediaHelper($resource) !== false)) {
+            || ($resource instanceof File && $this->onlineMediaHelperRegistry->getOnlineMediaHelper($resource) !== false)) {
             return;
         }
 
         $driver = $event->getDriver();
         if ($driver instanceof AbstractHierarchicalFilesystemDriver && $resource instanceof FileInterface) {
+            $identifier = $resource->getIdentifier();
+            if ($identifier === '') {
+                return;
+            }
             // @extensionScannerIgnoreLine
-            $publicUrl = $driver->getPublicUrl($resource->getIdentifier());
+            $publicUrl = $driver->getPublicUrl($identifier);
             $event->setPublicUrl($this->host . $publicUrl);
         }
     }
