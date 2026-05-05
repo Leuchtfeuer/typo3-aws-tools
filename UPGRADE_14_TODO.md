@@ -211,7 +211,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Issue**: The PHP-CS-Fixer configuration uses the legacy file name `.php_cs`. Recent versions of `friendsofphp/php-cs-fixer` (3.x and later) expect `.php-cs-fixer.dist.php`. Not a TYPO3 14 breaking change, but housekeeping that fits the upgrade scope.
 
-- [ ] Rename `.php_cs` to `.php-cs-fixer.dist.php` (and update any CI references)
+- [x] Rename `.php_cs` to `.php-cs-fixer.dist.php`
 
 ---
 
