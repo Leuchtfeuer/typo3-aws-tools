@@ -108,7 +108,7 @@ class CdnEventListener implements SingletonInterface
         try {
             $typoscript = $this->configurationManager
                 ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-            if (!empty($typoscript)) {
+            if ($typoscript !== []) {
                 $config = $typoscript['config']['tx_awstools.'] ?? [];
                 return !empty($config['enabled']) && !empty($config['replacer.']['eventListener']);
             }
