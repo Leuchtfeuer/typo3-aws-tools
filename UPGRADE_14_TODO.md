@@ -116,7 +116,7 @@ These items are deprecated in TYPO3 13 and will break in TYPO3 14. They should b
 
 **Reference**: Breaking-105728
 
-- [ ] Add `ExtensionManagementUtility::addTypoScriptSetup(...)` in `ext_localconf.php` to register the `module.tx_awstools` configuration as global TypoScript (in addition to or instead of the static template)
+- [x] Add `ExtensionManagementUtility::addTypoScriptSetup(...)` in `ext_localconf.php` to register the `module.tx_awstools` configuration as global TypoScript
 
 ---
 
