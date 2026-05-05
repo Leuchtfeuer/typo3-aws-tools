@@ -18,6 +18,7 @@ use TYPO3\CMS\Backend\Template\Components\ActionGroup;
 use TYPO3\CMS\Backend\Template\Components\ComponentFactory;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconSize;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FolderInterface;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
@@ -29,7 +30,8 @@ readonly class EditIconsEventListener implements SingletonInterface
     public function __construct(
         private UriBuilder $uriBuilder,
         private IconFactory $iconFactory,
-        private ComponentFactory $componentFactory
+        private ComponentFactory $componentFactory,
+        private PageRenderer $pageRenderer
     ) {}
 
     /**
@@ -59,6 +61,7 @@ readonly class EditIconsEventListener implements SingletonInterface
                 ->setClasses('c-awstools__invalidate');
 
             $event->setAction($button, 'awstools_invalidate', ActionGroup::secondary);
+            $this->pageRenderer->loadJavaScriptModule('@leuchtfeuer/aws-tools/cloud-front-invalidation-module');
         }
     }
 
