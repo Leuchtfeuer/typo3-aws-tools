@@ -12,9 +12,7 @@
 namespace Leuchtfeuer\AwsTools\EventListener;
 
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
 use TYPO3\CMS\Core\Resource\File;
@@ -22,7 +20,6 @@ use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperRegistry;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class CdnEventListener implements SingletonInterface
@@ -133,26 +130,8 @@ class CdnEventListener implements SingletonInterface
             return $languageAttribute->toArray();
         }
 
-        // Fallback: resolve language from site configuration using the request URI
-        /** @var SiteConfiguration $siteConfiguration */
-        $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
-        $normalizedParams = $request->getAttribute('normalizedParams');
-        $calledBaseUri = $normalizedParams instanceof NormalizedParams
-            ? rtrim($normalizedParams->getRequestDir(), '/')
-            : rtrim(GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR'), '/');
-        $allSites = $siteConfiguration->getAllExistingSites();
-
-        foreach ($allSites as $site) {
-            $baseUri = rtrim((string)$site->getBase(), '/');
-
-            if ($baseUri === $calledBaseUri) {
-                $languages = $site->getAttribute('languages');
-                return reset($languages) ?: [];
-            }
-        }
-
-        if ($site = reset($allSites)) {
-            // if no site matches, get the first as default
+        $site = $request->getAttribute('site');
+        if ($site !== null) {
             $languages = $site->getAttribute('languages');
             return reset($languages) ?: [];
         }
