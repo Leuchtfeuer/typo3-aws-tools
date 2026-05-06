@@ -1,7 +1,7 @@
 .. include:: ../../Includes.txt
 
 ===========================
-Version 14.0.0 - 2026/05/05
+Version 14.0.0 - 2026/05/06
 ===========================
 
 * Add support for TYPO3 14
@@ -27,6 +27,7 @@ All Changes
 
 This is a list of all changes in this release::
 
+    2026-05-06 [TASK] Simplify language resolution to use request site attribute [TER-457] [TER-468] (Commit ab48b4e by Oliver Heins)
     2026-05-05 [TASK] Align module icon colors with TYPO3 color scheme [TER-457] [TER-468] (Commit fadadff by Oliver Heins)
     2026-05-05 [TASK] Housekeeping: Minor code quality fixes and version adjustments (Commit 263cf67 by Oliver Heins)
     2026-05-05 [BUGFIX] Fix CDN rewriting skipped in eID context (e.g. tx_cms_showpic) (Commit 400c8f4 by Oliver Heins)
