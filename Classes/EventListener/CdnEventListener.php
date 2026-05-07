@@ -11,7 +11,7 @@
 
 namespace Leuchtfeuer\AwsTools\EventListener;
 
-use TYPO3\CMS\Core\Configuration\SiteConfiguration;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Event\GeneratePublicUrlForResourceEvent;
@@ -19,71 +19,28 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperRegistry;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class CdnEventListener implements SingletonInterface
 {
-    protected bool $responsible = false;
+    private bool $initialized = false;
 
-    protected string $host = '';
+    private bool $responsible = false;
 
-    public function __construct(private readonly OnlineMediaHelperRegistry $onlineMediaHelperRegistry)
-    {
-        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
-        if (empty($request) || ApplicationType::fromRequest($request)->isFrontend()) {
-            $language = [];
+    private string $host = '';
 
-            if (!empty($request)) {
-                $language = $request->getAttribute('language')->toArray();
-            } else {
-                /**
-                 * @var SiteConfiguration $siteConfiguration
-                 */
-                $siteConfiguration = GeneralUtility::makeInstance(SiteConfiguration::class);
-                $calledBaseUri = rtrim(GeneralUtility::getIndpEnv('TYPO3_REQUEST_DIR'), '/');
-                $allSites = $siteConfiguration->getAllExistingSites();
-
-                foreach ($allSites as $site) {
-                    $baseUri = rtrim((string)$site->getBase(), '/');
-
-                    if ($baseUri === $calledBaseUri) {
-                        $languages = $site->getAttribute('languages');
-                        $language = reset($languages);
-                        break;
-                    }
-                }
-
-                if (count($language) === 0 && $site = reset($allSites)) {
-                    // if no site matches, get the first as default
-                    $languages = $site->getAttribute('languages');
-                    $language = reset($languages);
-                }
-            }
-
-            try {
-                $typoscript = GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
-                    ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-
-                $config = $typoscript['config']['tx_awstools.'] ?? [];
-                $this->responsible = false;
-                if (!empty($config['enabled']) && !empty($config['replacer.']['eventListener'])
-                    && !empty($language['awstools_cdn_enabled']) && !empty($language['awstools_cdn_host'])
-                ) {
-                    $this->responsible = true;
-                }
-            } catch (\Exception) {
-                $this->responsible = false;
-            }
-
-            if ($this->responsible) {
-                $this->host = $language['awstools_cdn_host'];
-            }
-        }
-    }
+    public function __construct(
+        private readonly ConfigurationManagerInterface $configurationManager,
+        private readonly OnlineMediaHelperRegistry $onlineMediaHelperRegistry
+    ) {}
 
     public function onResourceStorageEmitPreGeneratePublicUrlSignal(GeneratePublicUrlForResourceEvent $event): void
     {
+        if (!$this->initialized) {
+            $this->initializeFromRequest();
+        }
+
         $resource = $event->getResource();
 
         if (!$this->responsible
@@ -101,5 +58,84 @@ class CdnEventListener implements SingletonInterface
             $publicUrl = $driver->getPublicUrl($identifier);
             $event->setPublicUrl($this->host . $publicUrl);
         }
+    }
+
+    private function initializeFromRequest(): void
+    {
+        $this->initialized = true;
+
+        $request = $this->resolveRequest();
+        if (!$request instanceof ServerRequestInterface || !ApplicationType::fromRequest($request)->isFrontend()) {
+            return;
+        }
+
+        $language = $this->resolveLanguage($request);
+
+        if (empty($language['awstools_cdn_enabled']) || empty($language['awstools_cdn_host'])) {
+            return;
+        }
+
+        $this->responsible = $this->isCdnEnabledInTypoScript($request);
+
+        if ($this->responsible) {
+            $this->host = $language['awstools_cdn_host'];
+        }
+    }
+
+    /**
+     * Checks TypoScript config.tx_awstools for CDN activation flags.
+     *
+     * In eID contexts (e.g. tx_cms_showpic) TypoScript is not bootstrapped — returns true
+     * so that CDN rewriting follows the site language config alone.
+     */
+    private function isCdnEnabledInTypoScript(ServerRequestInterface $request): bool
+    {
+        // TYPO3 14 native: available on full frontend page requests
+        $frontendTypoScript = $request->getAttribute('frontend.typoscript');
+        if ($frontendTypoScript instanceof FrontendTypoScript) {
+            try {
+                $config = $frontendTypoScript->getConfigArray()['tx_awstools.'] ?? [];
+                return !empty($config['enabled']) && !empty($config['replacer.']['eventListener']);
+            } catch (\RuntimeException) {
+                // config not yet initialised — treat as unavailable
+            }
+        }
+
+        // Extbase fallback: works on normal frontend pages, may fail in eID contexts
+        try {
+            $typoscript = $this->configurationManager
+                ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+            if ($typoscript !== []) {
+                $config = $typoscript['config']['tx_awstools.'] ?? [];
+                return !empty($config['enabled']) && !empty($config['replacer.']['eventListener']);
+            }
+        } catch (\Exception) {
+            // ConfigurationManager unavailable (no page context)
+        }
+
+        // eID context: TypoScript not bootstrapped — language config is sufficient
+        return true;
+    }
+
+    private function resolveRequest(): ?ServerRequestInterface
+    {
+        return $GLOBALS['TYPO3_REQUEST'] ?? null;
+    }
+
+    /** @return array<string, mixed> */
+    private function resolveLanguage(ServerRequestInterface $request): array
+    {
+        $languageAttribute = $request->getAttribute('language');
+        if ($languageAttribute !== null) {
+            return $languageAttribute->toArray();
+        }
+
+        $site = $request->getAttribute('site');
+        if ($site !== null) {
+            $languages = $site->getAttribute('languages');
+            return reset($languages) ?: [];
+        }
+
+        return [];
     }
 }

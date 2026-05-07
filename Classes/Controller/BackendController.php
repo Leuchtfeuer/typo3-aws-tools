@@ -24,15 +24,17 @@ use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceInterface;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 readonly class BackendController implements SingletonInterface
 {
     public function __construct(
         private CloudFrontRepository $cloudFrontRepository,
+        private ExtensionConfiguration $extensionConfiguration,
         private ResourceFactory $resourceFactory,
+        private StorageRepository $storageRepository,
         private Context $context
     ) {}
 
@@ -44,7 +46,7 @@ readonly class BackendController implements SingletonInterface
         if ($item !== null && $this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
             try {
                 $identifier = '/' . ltrim($identifier, '/');
-                $distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
+                $distributions = $this->extensionConfiguration->getCloudFrontDistributions();
                 $this->cloudFrontRepository->createBatchInvalidation($distributions, $identifier);
 
                 return new JsonResponse([
@@ -77,15 +79,14 @@ readonly class BackendController implements SingletonInterface
 
     protected function getFile(string $identifier, int $storage): ?FileInterface
     {
-        return $this->resourceFactory
-            ->getFileObjectByStorageAndIdentifier($storage, $identifier);
+        return $this->storageRepository->findByUid($storage)?->getFile($identifier);
     }
 
     protected function isPermitted(?ResourceInterface $item, string $type): bool
     {
         try {
             return
-                $item instanceof \TYPO3\CMS\Core\Resource\ResourceInterface
+                $item instanceof ResourceInterface
                 && $this->context->getPropertyFromAspect('backend.user', 'isLoggedIn')
                 && $item->getStorage()->checkUserActionPermission('invalidate', $type);
         } catch (AspectNotFoundException) {

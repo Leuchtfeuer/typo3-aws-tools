@@ -29,8 +29,13 @@ Rewrite File Paths
 ==================
 
 All paths to assets located in resource stores (fileadmin, etc.) are automatically rewritten by a TYPO3 interface. Since not all
-files are "fetched" by this mechanism, file paths (e.g. paths to stylesheets or JavaScript and fonts located in a separate site 
+files are "fetched" by this mechanism, file paths (e.g. paths to stylesheets or JavaScript and fonts located in a separate site
 extension) configured in the TypoScript setup are rewritten by a regular expression.
+
+.. note::
+
+   As of version 14.0.0, the extension TypoScript setup is registered globally and does not need to be included via a
+   TypoScript template record. The ``config.tx_awstools`` configuration below can be placed in any TypoScript template.
 
 .. code-block:: typoscript
 
@@ -90,6 +95,17 @@ you can specify a comma-separated list of distributions where your assets are st
 .. note::
 
    Please note that all entries are always invalidated simultaneously in all configured distributions.
+
+.. _admin-configuration-backendModule:
+
+Backend Module
+==============
+
+The CloudFront invalidation module is located under **System** in the TYPO3 backend.
+
+.. note::
+
+   In previous versions the module was located under **Tools**. It has been moved to **System** as of version 14.0.0.
 
 .. _admin-configuration-accessProtection:
 

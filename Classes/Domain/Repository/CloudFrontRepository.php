@@ -15,9 +15,9 @@ use Aws\CloudFront\CloudFrontClient;
 use Leuchtfeuer\AwsTools\Constants;
 use TYPO3\CMS\Core\Http\Uri;
 
-class CloudFrontRepository
+readonly class CloudFrontRepository
 {
-    public function __construct(protected CloudFrontClient $cloudFrontClient) {}
+    public function __construct(private CloudFrontClient $cloudFrontClient) {}
 
     /**
      * This will list the past X ($maxItems) invalidation items for the given distribution ($distributionId).

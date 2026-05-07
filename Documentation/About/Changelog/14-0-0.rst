@@ -1,0 +1,52 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 14.0.0 - 2026/05/06
+===========================
+
+* Add support for TYPO3 14
+* Drop support for TYPO3 13
+* Fix CDN rewriting skipped in eID context (e.g. tx_cms_showpic)
+
+.. attention::
+
+   **Breaking changes when upgrading from v13:**
+
+   * The backend module has moved from the **Tools** section to the **System** section.
+   * The extension TypoScript setup is now registered globally via ``addTypoScriptSetup()`` and
+     no longer needs to be included manually through a TypoScript template record.
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v14.0.0>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2026-05-06 [TASK] Simplify language resolution to use request site attribute [TER-457] [TER-468] (Commit ab48b4e by Oliver Heins)
+    2026-05-05 [TASK] Align module icon colors with TYPO3 color scheme [TER-457] [TER-468] (Commit fadadff by Oliver Heins)
+    2026-05-05 [TASK] Housekeeping: Minor code quality fixes and version adjustments (Commit 263cf67 by Oliver Heins)
+    2026-05-05 [BUGFIX] Fix CDN rewriting skipped in eID context (e.g. tx_cms_showpic) (Commit 400c8f4 by Oliver Heins)
+    2026-05-05 [TASK] Housekeeping: Apply readonly modifiers and use-statement cleanup (Commit 82f8331 by Oliver Heins)
+    2026-05-05 [TASK] Housekeeping: Remove Libraries/vendor from version control (Commit 20d26c9 by Oliver Heins)
+    2026-05-05 [TASK] Deprecation #109438: Migrate JS module loading from ext_tables.php to EditIconsEventListener (Commit 2fc1629 by Oliver Heins)
+    2026-05-05 [TASK] Rename .php_cs to .php-cs-fixer.dist.php for php-cs-fixer 3.x compatibility (Commit 6681c51 by Oliver Heins)
+    2026-05-05 [TASK] Breaking #108113: Remove GLOBALS TYPO3_REQUEST constructor access from CdnEventListener (Commit 4c0bb44 by Oliver Heins)
+    2026-05-05 [TASK] Breaking #107884: Migrate ProcessFileListActionsEvent to use Buttons API (Commit 90bfc16 by Oliver Heins)
+    2026-05-05 [TASK] Add explicit PHP 8.3 and typo3/cms-filelist dependencies to composer.json (Commit ab29868 by Oliver Heins)
+    2026-05-05 [TASK] Breaking #108304: Update composer.json description to derive correct extension title (Commit 1008199 by Oliver Heins)
+    2026-05-05 [TASK] Breaking #105728: Register module TypoScript globally for Extbase backend module (Commit 74d1f61 by Oliver Heins)
+    2026-05-05 [TASK] Important #107735: Replace removed ResourceFactory::getFileObjectByStorageAndIdentifier() (Commit 28e606b by Oliver Heins)
+    2026-05-05 [TASK] Breaking #107943: Remove reference to removed output-compression middleware (Commit 1487d13 by Oliver Heins)
+    2026-05-05 [TASK] Feature #107628: Rename backend module parent from 'tools' to 'system' (Commit a42c858 by Oliver Heins)
+    2026-05-05 [TASK] Update composer.json and ext_emconf.php for TYPO3 14 (Commit 74afcca by Oliver Heins)
+    2026-05-05 [TASK] Fix PHP 8.2 compatibility issues (Commit 6a6d43a by Oliver Heins)
+    2026-05-04 [TASK] Refactor classes to use DI and modern PHP syntax (Commit 104d99f by Oliver Heins)
+    2026-05-04 [TASK] Use concrete Folder type instead of FolderInterface (Commit 23bc469 by Oliver Heins)
+    2026-05-04 [TASK] Fix PHPStan issues (Commit 5842230 by Oliver Heins)
+    2026-05-04 [TASK] Run PHP CS Fixer (Commit d9d8b35 by Oliver Heins)
+    2026-03-31 [TASK] Change rendering to PHP based rendering (Commit cdd2d09 by Ines Willenbrock)

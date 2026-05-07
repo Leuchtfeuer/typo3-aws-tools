@@ -1,6 +1,6 @@
 {
     "name": "leuchtfeuer/aws-tools",
-    "description": "This extension connects your TYPO3 instance to Amazon CloudFront. It rewrites all file paths in the frontend to match your CDN domain. You also have the possibility to invalidate Amazon CloudFront entries.",
+    "description": "Amazon Web Services (AWS) Toolbox - This extension connects your TYPO3 instance to Amazon CloudFront. It rewrites all file paths in the frontend to match your CDN domain. You also have the possibility to invalidate Amazon CloudFront entries.",
     "keywords": [
         "AWS",
         "Amazon Web Services",
@@ -30,17 +30,20 @@
         }
     },
     "require": {
+        "php": "^8.2",
         "aws/aws-sdk-php": "^3.149",
-        "typo3/cms-backend": "^13.4",
-        "typo3/cms-core": "^13.4",
-        "typo3/cms-extbase": "^13.4"
+        "typo3/cms-backend": "^14.3",
+        "typo3/cms-core": "^14.3",
+        "typo3/cms-extbase": "^14.3",
+        "typo3/cms-filelist": "^14.3"
     },
     "replace": {
         "typo3-ter/aws-tools": "self.version"
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "aws_tools"
+            "extension-key": "aws_tools",
+            "version": "14.0.0"
         }
     }
 }
