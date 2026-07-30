@@ -71,7 +71,7 @@ class CdnEventListener implements SingletonInterface
 
         $language = $this->resolveLanguage($request);
 
-        if (empty($language['awstools_cdn_enabled']) || empty($language['awstools_cdn_host'])) {
+        if (filter_var($language['awstools_cdn_enabled'] ?? null, FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host'])) {
             return;
         }
 
