@@ -26,8 +26,12 @@ class CdnEventListener implements SingletonInterface
 
     protected string $host = '';
 
-    public function __construct()
+    private OnlineMediaHelperRegistry $onlineMediaHelperRegistry;
+
+    public function __construct(OnlineMediaHelperRegistry $onlineMediaHelperRegistry)
     {
+        $this->onlineMediaHelperRegistry = $onlineMediaHelperRegistry;
+
         $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         if (empty($request) || ApplicationType::fromRequest($request)->isFrontend()) {
             $language = [];
@@ -75,7 +79,7 @@ class CdnEventListener implements SingletonInterface
         $resource = $event->getResource();
 
         if (!$this->responsible
-            || ($resource instanceof File && OnlineMediaHelperRegistry::getInstance()->getOnlineMediaHelper($resource) !== false)) {
+            || ($resource instanceof File && $this->onlineMediaHelperRegistry->getOnlineMediaHelper($resource) !== false)) {
             return;
         }
 
