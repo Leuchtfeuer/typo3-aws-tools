@@ -11,6 +11,7 @@
 
 namespace Leuchtfeuer\AwsTools\EventListener;
 
+use Leuchtfeuer\AwsTools\Configuration\CdnConfiguration;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
@@ -19,8 +20,6 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\OnlineMediaHelperRegistry;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class CdnEventListener implements SingletonInterface
 {
@@ -31,7 +30,7 @@ class CdnEventListener implements SingletonInterface
     private string $host = '';
 
     public function __construct(
-        private readonly ConfigurationManagerInterface $configurationManager,
+        private readonly CdnConfiguration $cdnConfiguration,
         private readonly OnlineMediaHelperRegistry $onlineMediaHelperRegistry
     ) {}
 
@@ -71,50 +70,12 @@ class CdnEventListener implements SingletonInterface
 
         $language = $this->resolveLanguage($request);
 
-        if (empty($language['awstools_cdn_enabled']) || empty($language['awstools_cdn_host'])) {
-            return;
-        }
-
-        $this->responsible = $this->isCdnEnabledInTypoScript($request);
+        $this->responsible = $this->cdnConfiguration
+            ->isReplacerEnabled(CdnConfiguration::REPLACER_EVENT_LISTENER, $language, $request);
 
         if ($this->responsible) {
-            $this->host = $language['awstools_cdn_host'];
+            $this->host = $this->cdnConfiguration->resolveHost($language);
         }
-    }
-
-    /**
-     * Checks TypoScript config.tx_awstools for CDN activation flags.
-     *
-     * In eID contexts (e.g. tx_cms_showpic) TypoScript is not bootstrapped — returns true
-     * so that CDN rewriting follows the site language config alone.
-     */
-    private function isCdnEnabledInTypoScript(ServerRequestInterface $request): bool
-    {
-        // TYPO3 14 native: available on full frontend page requests
-        $frontendTypoScript = $request->getAttribute('frontend.typoscript');
-        if ($frontendTypoScript instanceof FrontendTypoScript) {
-            try {
-                $config = $frontendTypoScript->getConfigArray()['tx_awstools.'] ?? [];
-                return !empty($config['enabled']) && !empty($config['replacer.']['eventListener']);
-            } catch (\RuntimeException) {
-                // config not yet initialised — treat as unavailable
-            }
-        }
-
-        // Extbase fallback: works on normal frontend pages, may fail in eID contexts
-        try {
-            $typoscript = $this->configurationManager
-                ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-            if ($typoscript !== []) {
-                $config = $typoscript['config']['tx_awstools.'] ?? [];
-                return !empty($config['enabled']) && !empty($config['replacer.']['eventListener']);
-            }
-        } catch (\Exception) {
-            // ConfigurationManager unavailable (no page context)
-        }
-
-        // eID context: TypoScript not bootstrapped — language config is sufficient
-        return true;
     }
 
     private function resolveRequest(): ?ServerRequestInterface

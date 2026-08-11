@@ -11,6 +11,7 @@
 
 namespace Leuchtfeuer\AwsTools\Middleware;
 
+use Leuchtfeuer\AwsTools\Configuration\CdnConfiguration;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -19,6 +20,8 @@ use TYPO3\CMS\Core\Http\Stream;
 
 class ContentReplaceMiddleware implements MiddlewareInterface
 {
+    public function __construct(private readonly CdnConfiguration $cdnConfiguration) {}
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $siteLanguage = $request->getAttribute('language');
@@ -27,19 +30,18 @@ class ContentReplaceMiddleware implements MiddlewareInterface
         }
         $language = $siteLanguage->toArray();
         $response = $handler->handle($request);
-        $config = $request->getAttribute('frontend.typoscript')?->getConfigArray()['tx_awstools.'] ?? [];
 
-        if (empty($config['enabled']) || filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === false || empty($language['awstools_cdn_host']) || $config['replacer.']['middleware'] !== '1') {
+        if (!$this->cdnConfiguration->isReplacerEnabled(CdnConfiguration::REPLACER_MIDDLEWARE, $language, $request)) {
             return $response;
         }
 
-        $host = rtrim((string)$language['awstools_cdn_host'], '/');
+        $host = $this->cdnConfiguration->resolveHost($language);
         $patterns = [];
         $replacements = [];
 
-        foreach ($config['patterns.'] ?? [] as $search) {
-            $patterns[] = sprintf('#%s#', $search['search']);
-            $replacements[] = sprintf($search['replace'], $host);
+        foreach ($this->cdnConfiguration->getPatterns($request) as $pattern) {
+            $patterns[] = sprintf('#%s#', $pattern['search']);
+            $replacements[] = sprintf($pattern['replace'], $host);
         }
 
         if ($patterns !== []) {
