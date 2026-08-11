@@ -1,0 +1,28 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 14.0.1 - 2026/08/12
+===========================
+
+* Evaluate all CDN activation flags with the same boolean semantics
+* Fix duplicate slashes in rewritten file URLs when the CDN host ends with a slash
+* Fix undefined array key warnings when a site language has no CDN configuration
+
+.. attention::
+
+   Site language values such as ``false``, ``off`` or ``no`` in **Enable CDN** are now
+   consistently treated as disabled. Previously the file URL rewriting activated on such
+   values while the HTML content replacement did not.
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v14.0.1>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2026-08-11 [TASK] Unify CDN flag evaluation in CdnConfiguration [TER-497] (Commit 6eaf515 by Oliver Heins)
