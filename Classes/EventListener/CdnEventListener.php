@@ -26,8 +26,12 @@ class CdnEventListener implements SingletonInterface
 
     protected string $host = '';
 
-    public function __construct()
+    private OnlineMediaHelperRegistry $onlineMediaHelperRegistry;
+
+    public function __construct(OnlineMediaHelperRegistry $onlineMediaHelperRegistry)
     {
+        $this->onlineMediaHelperRegistry = $onlineMediaHelperRegistry;
+
         $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
         if (empty($request) || ApplicationType::fromRequest($request)->isFrontend()) {
             $language = [];
@@ -59,10 +63,15 @@ class CdnEventListener implements SingletonInterface
                 }
             }
 
-            $typoscript = GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
-                ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-            $config = $typoscript['config']['tx_awstools.'] ?? [];
-            $this->responsible = isset($config['enabled'], $config['replacer.']['eventListener'], $language['awstools_cdn_enabled']) && $config['enabled'] && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host']) && $config['replacer.']['eventListener'] === '1';
+            $typoscript = GeneralUtility::removeDotsFromTS(
+                GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
+                ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+            );
+            $config = $typoscript['config']['tx_awstools'] ?? [];
+            $this->responsible = isset($config['enabled'], $config['replacer']['eventListener'], $language['awstools_cdn_enabled'])
+                && $config['enabled']
+                && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true
+                && !empty($language['awstools_cdn_host']) && $config['replacer']['eventListener'] === '1';
 
             if ($this->responsible) {
                 $this->host = $language['awstools_cdn_host'];
@@ -75,7 +84,7 @@ class CdnEventListener implements SingletonInterface
         $resource = $event->getResource();
 
         if (!$this->responsible
-            || ($resource instanceof File && OnlineMediaHelperRegistry::getInstance()->getOnlineMediaHelper($resource) !== false)) {
+            || ($resource instanceof File && $this->onlineMediaHelperRegistry->getOnlineMediaHelper($resource) !== false)) {
             return;
         }
 
