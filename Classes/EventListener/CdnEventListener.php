@@ -61,23 +61,10 @@ class CdnEventListener implements SingletonInterface
                 }
             }
 
-            try {
-                $typoscript = GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
-                    ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-
-                $config = $typoscript['config']['tx_awstools.'] ?? [];
-                $this->responsible = false;
-                if (!empty($config['enabled']) && !empty($config['replacer.']['eventListener'])
-                    && !empty($language['awstools_cdn_enabled']) && !empty($language['awstools_cdn_host'])
-                ) {
-                    $this->responsible = true;
-                }
-            } catch (\Exception) {
-                $this->responsible = false;
-            }
+            $this->responsible = $this->isCdnReplacementEnabled($language);
 
             if ($this->responsible) {
-                $this->host = $language['awstools_cdn_host'];
+                $this->host = (string)$language['awstools_cdn_host'];
             }
         }
     }
@@ -101,5 +88,29 @@ class CdnEventListener implements SingletonInterface
             $publicUrl = $driver->getPublicUrl($identifier);
             $event->setPublicUrl($this->host . $publicUrl);
         }
+    }
+
+    private function isCdnReplacementEnabled(array $language): bool
+    {
+        try {
+            $typoScript = GeneralUtility::removeDotsFromTS(
+                GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
+                    ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+            );
+        } catch (\Exception) {
+            return false;
+        }
+
+        $config = $typoScript['config']['tx_awstools'] ?? [];
+
+        return $this->isFlagEnabled($config['enabled'] ?? null)
+            && $this->isFlagEnabled($config['replacer']['eventListener'] ?? null)
+            && $this->isFlagEnabled($language['awstools_cdn_enabled'] ?? null)
+            && !empty($language['awstools_cdn_host']);
+    }
+
+    private function isFlagEnabled(mixed $value): bool
+    {
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 }
