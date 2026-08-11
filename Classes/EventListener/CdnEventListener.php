@@ -63,10 +63,15 @@ class CdnEventListener implements SingletonInterface
                 }
             }
 
-            $typoscript = GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
-                ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-            $config = $typoscript['config']['tx_awstools.'] ?? [];
-            $this->responsible = isset($config['enabled'], $config['replacer.']['eventListener'], $language['awstools_cdn_enabled']) && $config['enabled'] && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true && !empty($language['awstools_cdn_host']) && $config['replacer.']['eventListener'] === '1';
+            $typoscript = GeneralUtility::removeDotsFromTS(
+                GeneralUtility::makeInstance(ConfigurationManagerInterface::class)
+                ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+            );
+            $config = $typoscript['config']['tx_awstools'] ?? [];
+            $this->responsible = isset($config['enabled'], $config['replacer']['eventListener'], $language['awstools_cdn_enabled'])
+                && $config['enabled']
+                && filter_var($language['awstools_cdn_enabled'], FILTER_VALIDATE_BOOLEAN) === true
+                && !empty($language['awstools_cdn_host']) && $config['replacer']['eventListener'] === '1';
 
             if ($this->responsible) {
                 $this->host = $language['awstools_cdn_host'];
