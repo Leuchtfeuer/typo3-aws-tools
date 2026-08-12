@@ -23,6 +23,12 @@ configuration of the page configuration. The CDN can be enabled or disabled per 
 
    CDN Settings within the Site Configuration
 
+.. note::
+
+   **CDN Host** must be an absolute URL including the scheme, e.g. ``https://cdn.example.com``.
+   Only ``http`` and ``https`` are accepted. Any other value is discarded, disables the CDN
+   rewriting for that site language, and is logged with the ``warning`` level.
+
 .. _admin-configuration-rewriteFilePaths:
 
 Rewrite File Paths

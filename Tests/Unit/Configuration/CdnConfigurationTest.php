@@ -18,6 +18,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Core\TypoScript\AST\Node\RootNode;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -228,6 +229,39 @@ final class CdnConfigurationTest extends UnitTestCase
         ));
     }
 
+    #[Test]
+    public function unavailableTypoScriptIsLoggedForDebugging(): void
+    {
+        $this->configurationManager->method('getConfiguration')
+            ->willThrowException(new \RuntimeException('no page context', 1770000003));
+
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects(self::once())->method('debug');
+        $this->subject->setLogger($logger);
+
+        $this->subject->isReplacerEnabled(
+            CdnConfiguration::REPLACER_EVENT_LISTENER,
+            $this->createLanguage('1'),
+            $this->createRequest(null)
+        );
+    }
+
+    #[Test]
+    public function uninitialisedConfigArrayIsLoggedForDebugging(): void
+    {
+        $this->configurationManager->method('getConfiguration')->willReturn(['config' => []]);
+
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects(self::once())->method('debug');
+        $this->subject->setLogger($logger);
+
+        $this->subject->isReplacerEnabled(
+            CdnConfiguration::REPLACER_EVENT_LISTENER,
+            $this->createLanguage('1'),
+            $this->createRequest(new FrontendTypoScript(new RootNode(), [], [], []))
+        );
+    }
+
     /**
      * @return \Generator<string, array{array<string, mixed>, string}>
      */
@@ -236,8 +270,25 @@ final class CdnConfigurationTest extends UnitTestCase
         yield 'host without trailing slash' => [['awstools_cdn_host' => 'https://cdn.example.com'], 'https://cdn.example.com'];
         yield 'host with trailing slash' => [['awstools_cdn_host' => 'https://cdn.example.com/'], 'https://cdn.example.com'];
         yield 'host with multiple trailing slashes' => [['awstools_cdn_host' => 'https://cdn.example.com//'], 'https://cdn.example.com'];
+        yield 'host with unencrypted scheme' => [['awstools_cdn_host' => 'http://cdn.example.com'], 'http://cdn.example.com'];
+        yield 'host with port' => [['awstools_cdn_host' => 'https://cdn.example.com:8080'], 'https://cdn.example.com:8080'];
+        yield 'host with path' => [['awstools_cdn_host' => 'https://cdn.example.com/assets/'], 'https://cdn.example.com/assets'];
         yield 'missing host' => [[], ''];
         yield 'empty host' => [['awstools_cdn_host' => ''], ''];
+    }
+
+    /**
+     * @return \Generator<string, array{array<string, mixed>}>
+     */
+    public static function malformedHostDataProvider(): \Generator
+    {
+        yield 'malformed url' => [['awstools_cdn_host' => 'https:///www.example.org|']];
+        yield 'missing scheme' => [['awstools_cdn_host' => 'cdn.example.com']];
+        yield 'protocol relative host' => [['awstools_cdn_host' => '//cdn.example.com']];
+        yield 'unsupported scheme' => [['awstools_cdn_host' => 'javascript:alert(1)']];
+        yield 'data scheme' => [['awstools_cdn_host' => 'data:text/html,<h1>x</h1>']];
+        yield 'whitespace only' => [['awstools_cdn_host' => '   ']];
+        yield 'slashes only' => [['awstools_cdn_host' => '///']];
     }
 
     #[Test]
@@ -245,6 +296,52 @@ final class CdnConfigurationTest extends UnitTestCase
     public function hostIsNormalised(array $language, string $expectation): void
     {
         self::assertSame($expectation, $this->subject->resolveHost($language));
+    }
+
+    #[Test]
+    #[DataProvider('malformedHostDataProvider')]
+    public function malformedHostIsDiscarded(array $language): void
+    {
+        self::assertSame('', $this->subject->resolveHost($language));
+    }
+
+    #[Test]
+    #[DataProvider('malformedHostDataProvider')]
+    public function malformedHostDisablesRewritingDespiteEnabledFlags(array $language): void
+    {
+        $request = $this->createRequestWithTypoScript([
+            'enabled' => '1',
+            'replacer.' => ['eventListener' => '1'],
+        ]);
+
+        self::assertFalse($this->subject->isReplacerEnabled(
+            CdnConfiguration::REPLACER_EVENT_LISTENER,
+            ['awstools_cdn_enabled' => '1'] + $language,
+            $request
+        ));
+    }
+
+    #[Test]
+    public function malformedHostIsLogged(): void
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects(self::once())->method('warning')->with(
+            self::anything(),
+            ['host' => 'cdn.example.com']
+        );
+        $this->subject->setLogger($logger);
+
+        $this->subject->resolveHost(['awstools_cdn_host' => 'cdn.example.com']);
+    }
+
+    #[Test]
+    public function validHostIsNotLogged(): void
+    {
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects(self::never())->method('warning');
+        $this->subject->setLogger($logger);
+
+        $this->subject->resolveHost(['awstools_cdn_host' => 'https://cdn.example.com']);
     }
 
     #[Test]

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Leuchtfeuer\AwsTools\Configuration;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
@@ -23,11 +25,15 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  * Both the event listener (file URLs) and the middleware (HTML content) ask this class,
  * so that a site language and TypoScript setup can never activate one and not the other.
  */
-class CdnConfiguration
+class CdnConfiguration implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public const REPLACER_EVENT_LISTENER = 'eventListener';
 
     public const REPLACER_MIDDLEWARE = 'middleware';
+
+    private const SUPPORTED_HOST_SCHEMES = ['http', 'https'];
 
     public function __construct(private readonly ConfigurationManagerInterface $configurationManager) {}
 
@@ -55,11 +61,31 @@ class CdnConfiguration
     }
 
     /**
+     * Returns an empty string for anything that is not an absolute http(s) URL, so that a
+     * malformed CDN host disables the rewriting instead of producing broken public URLs.
+     *
      * @param array<string, mixed> $language Site language configuration as array
      */
     public function resolveHost(array $language): string
     {
-        return rtrim((string)($language['awstools_cdn_host'] ?? ''), '/');
+        $host = rtrim((string)($language['awstools_cdn_host'] ?? ''), '/');
+
+        if ($host === '') {
+            return '';
+        }
+
+        if (filter_var($host, FILTER_VALIDATE_URL) === false
+            || !in_array(parse_url($host, PHP_URL_SCHEME), self::SUPPORTED_HOST_SCHEMES, true)
+        ) {
+            $this->logger?->warning(
+                'CDN host of the site language is not an absolute http(s) URL, CDN rewriting is disabled.',
+                ['host' => $host]
+            );
+
+            return '';
+        }
+
+        return $host;
     }
 
     /**
@@ -97,8 +123,12 @@ class CdnConfiguration
         if ($frontendTypoScript instanceof FrontendTypoScript) {
             try {
                 return $this->extractConfig($frontendTypoScript->getConfigArray());
-            } catch (\RuntimeException) {
+            } catch (\RuntimeException $exception) {
                 // config array not initialised yet, fall through to the Extbase configuration manager
+                $this->logger?->debug(
+                    'Frontend TypoScript holds no config array, falling back to the configuration manager.',
+                    ['exception' => $exception]
+                );
             }
         }
 
@@ -111,8 +141,12 @@ class CdnConfiguration
 
                 return $this->extractConfig(is_array($config) ? $config : []);
             }
-        } catch (\Exception) {
-            // no page context available
+        } catch (\Exception $exception) {
+            // no page context available, e.g. in eID requests
+            $this->logger?->debug(
+                'TypoScript is unavailable, the site language configuration decides on its own.',
+                ['exception' => $exception]
+            );
         }
 
         return null;
