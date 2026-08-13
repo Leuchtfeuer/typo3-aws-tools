@@ -1,0 +1,38 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 14.0.1 - 2026/08/12
+===========================
+
+* Evaluate all CDN activation flags with the same boolean semantics
+* Fix duplicate slashes in rewritten file URLs when the CDN host ends with a slash
+* Fix undefined array key warnings when a site language has no CDN configuration
+* Validate the CDN host and disable the rewriting instead of emitting broken public URLs
+* Log discarded CDN hosts and unavailable TypoScript contexts
+
+.. attention::
+
+   Site language values such as ``false``, ``off`` or ``no`` in **Enable CDN** are now
+   consistently treated as disabled. Previously the file URL rewriting activated on such
+   values while the HTML content replacement did not.
+
+.. attention::
+
+   **CDN Host** must now be an absolute ``http://`` or ``https://`` URL, as stated by its
+   label. Any other value - including a protocol relative host such as
+   ``//cdn.example.com`` - is discarded and disables the CDN rewriting for that site
+   language. A discarded host is logged with the ``warning`` level.
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v14.0.1>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2026-08-12 [TASK] Validate CDN host and log discarded configuration [TER-497] (Commit 6e9ced2 by Oliver Heins)
+    2026-08-11 [TASK] Unify CDN flag evaluation in CdnConfiguration [TER-497] (Commit 6eaf515 by Oliver Heins)

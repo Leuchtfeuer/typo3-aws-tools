@@ -24,6 +24,11 @@
             "Leuchtfeuer\\AwsTools\\": "Classes/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Leuchtfeuer\\AwsTools\\Tests\\": "Tests/"
+        }
+    },
     "config": {
         "platform": {
             "php": "8.2"
@@ -43,7 +48,7 @@
     "extra": {
         "typo3/cms": {
             "extension-key": "aws_tools",
-            "version": "14.0.0"
+            "version": "14.0.1"
         }
     }
 }
