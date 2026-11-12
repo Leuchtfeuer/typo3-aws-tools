@@ -56,6 +56,21 @@ final class CloudFrontRepositoryTest extends UnitTestCase
     }
 
     #[Test]
+    public function createInvalidationNormalizesPathsWithoutInjectedNormalizer(): void
+    {
+        $client = new CloudFrontClient([
+            'region' => 'us-east-1',
+            'version' => Constants::VERSION,
+            'credentials' => false,
+            'handler' => $this->mockHandler,
+        ]);
+
+        (new CloudFrontRepository($client))->createInvalidation('DIST', '/_assets/x/a.json*');
+
+        self::assertSame(['/_assets/x/a.json*'], $this->mockHandler->getLastCommand()['InvalidationBatch']['Paths']['Items']);
+    }
+
+    #[Test]
     public function createInvalidationRejectsInvalidPathBeforeCallingCloudFront(): void
     {
         try {

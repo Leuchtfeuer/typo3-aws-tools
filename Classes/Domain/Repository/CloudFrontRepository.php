@@ -21,7 +21,7 @@ readonly class CloudFrontRepository
 {
     public function __construct(
         private CloudFrontClient $cloudFrontClient,
-        private InvalidationPathNormalizer $pathNormalizer,
+        private InvalidationPathNormalizer $pathNormalizer = new InvalidationPathNormalizer(),
     ) {}
 
     /**
