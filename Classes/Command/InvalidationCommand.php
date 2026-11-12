@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the "AWS Tools" extension.
  *
@@ -19,16 +21,17 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class InvalidationCommand extends Command
 {
     private SymfonyStyle $io;
 
-    private CloudFrontRepository $cloudFrontRepository;
-
-    /** @var string[] */
-    private array $distributions = [];
+    public function __construct(
+        private readonly CloudFrontRepository $cloudFrontRepository,
+        private readonly ExtensionConfiguration $extensionConfiguration,
+    ) {
+        parent::__construct();
+    }
 
     protected function configure(): void
     {
@@ -41,15 +44,13 @@ class InvalidationCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->cloudFrontRepository = GeneralUtility::makeInstance(CloudFrontRepository::class);
-        $this->distributions = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getCloudFrontDistributions();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $paths = $input->getArgument('paths');
 
-        foreach ($this->distributions as $distribution) {
+        foreach ($this->extensionConfiguration->getCloudFrontDistributions() as $distribution) {
             try {
                 $result = $this->cloudFrontRepository->createInvalidation($distribution, $paths);
                 $paths = implode(', ', $result['Invalidation']['InvalidationBatch']['Paths']['Items'] ?? []);
