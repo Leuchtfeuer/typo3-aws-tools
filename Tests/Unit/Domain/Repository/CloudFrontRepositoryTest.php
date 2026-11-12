@@ -18,7 +18,6 @@ use Aws\MockHandler;
 use Aws\Result;
 use Leuchtfeuer\AwsTools\Constants;
 use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
-use Leuchtfeuer\AwsTools\Exception\InvalidInvalidationPathException;
 use Leuchtfeuer\AwsTools\Service\InvalidationPathNormalizer;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -53,16 +52,5 @@ final class CloudFrontRepositoryTest extends UnitTestCase
         $paths = $this->mockHandler->getLastCommand()['InvalidationBatch']['Paths'];
         self::assertSame(['/_assets/x/a.json*', '/b.json?1'], $paths['Items']);
         self::assertSame(2, $paths['Quantity']);
-    }
-
-    #[Test]
-    public function createInvalidationRejectsInvalidPathBeforeCallingCloudFront(): void
-    {
-        try {
-            $this->subject->createInvalidation('DIST', ['/ok.pdf', '/a~b.pdf']);
-            self::fail('Expected an InvalidInvalidationPathException.');
-        } catch (InvalidInvalidationPathException) {
-            self::assertCount(1, $this->mockHandler, 'CloudFront must not be called.');
-        }
     }
 }

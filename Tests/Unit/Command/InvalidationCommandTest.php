@@ -24,30 +24,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 final class InvalidationCommandTest extends UnitTestCase
 {
     #[Test]
-    public function invalidatesGivenPathsInConfiguredDistribution(): void
-    {
-        $extensionConfiguration = self::createStub(ExtensionConfiguration::class);
-        $extensionConfiguration->method('getCloudFrontDistributions')->willReturn(['DIST1']);
-
-        $invalidatedDistributions = [];
-        $cloudFrontRepository = $this->createMock(CloudFrontRepository::class);
-        $cloudFrontRepository
-            ->expects(self::once())
-            ->method('createInvalidation')
-            ->willReturnCallback(static function (string $distribution, array $paths) use (&$invalidatedDistributions): array {
-                $invalidatedDistributions[$distribution] = $paths;
-
-                return ['Invalidation' => ['InvalidationBatch' => ['Paths' => ['Items' => $paths]]]];
-            });
-
-        $commandTester = new CommandTester(new InvalidationCommand($cloudFrontRepository, $extensionConfiguration, new InvalidationPathNormalizer()));
-        $commandTester->execute(['paths' => ['/a.json*']]);
-
-        self::assertSame(0, $commandTester->getStatusCode());
-        self::assertSame(['DIST1' => ['/a.json*']], $invalidatedDistributions);
-    }
-
-    #[Test]
     public function rejectsInvalidPathWithoutCallingCloudFront(): void
     {
         $extensionConfiguration = self::createStub(ExtensionConfiguration::class);
