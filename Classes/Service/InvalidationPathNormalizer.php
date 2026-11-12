@@ -30,15 +30,13 @@ final readonly class InvalidationPathNormalizer
      */
     public function normalize(string $path): string
     {
-        $normalizedPath = trim($path);
+        $normalizedPath = trim(explode('#', $path, 2)[0]);
 
         if ($normalizedPath === '') {
             throw InvalidInvalidationPathException::isEmpty();
         }
 
-        $normalizedPath = explode('#', $normalizedPath, 2)[0];
-
-        if (str_contains($normalizedPath, '~')) {
+        if (str_contains($normalizedPath, '~') || stripos($normalizedPath, '%7e') !== false) {
             throw InvalidInvalidationPathException::containsTilde($path);
         }
 
