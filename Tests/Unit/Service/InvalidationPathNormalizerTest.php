@@ -58,6 +58,9 @@ final class InvalidationPathNormalizerTest extends UnitTestCase
         yield 'tilde in full URL' => ['https://cdn.example.com/~user/a.pdf'];
         yield 'empty path' => [''];
         yield 'whitespace only' => ['   '];
+        yield 'fragment only' => ['#top'];
+        yield 'encoded tilde' => ['/fileadmin/a%7Eb.pdf'];
+        yield 'encoded tilde in lower case' => ['/fileadmin/a%7eb.pdf'];
     }
 
     #[Test]
