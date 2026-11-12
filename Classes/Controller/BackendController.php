@@ -15,6 +15,7 @@ use Aws\Exception\AwsException;
 use Leuchtfeuer\AwsTools\Constants;
 use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
+use Leuchtfeuer\AwsTools\Exception\InvalidInvalidationPathException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Context\Context;
@@ -45,7 +46,6 @@ readonly class BackendController implements SingletonInterface
 
         if ($item !== null && $this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
             try {
-                $identifier = '/' . ltrim($identifier, '/');
                 $distributions = $this->extensionConfiguration->getCloudFrontDistributions();
                 $this->cloudFrontRepository->createBatchInvalidation($distributions, $identifier);
 
@@ -55,6 +55,10 @@ readonly class BackendController implements SingletonInterface
                 ]);
             } catch (AwsException $exception) {
                 return new JsonResponse(['message' => $exception->getAwsErrorMessage()], 500);
+            } catch (InvalidInvalidationPathException $exception) {
+                return new JsonResponse([
+                    'message' => LocalizationUtility::translate('messages.unsupported_resource_path.body', Constants::EXTENSION_NAME, [$exception->getPath()]),
+                ], 400);
             }
         }
 

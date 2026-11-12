@@ -14,6 +14,7 @@ namespace Leuchtfeuer\AwsTools\EventListener;
 use Aws\CloudFront\Exception\CloudFrontException;
 use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
+use Leuchtfeuer\AwsTools\Exception\InvalidInvalidationPathException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use TYPO3\CMS\Core\Resource\Event\AfterFileContentsSetEvent;
@@ -61,6 +62,8 @@ class FileInvalidationEventListener implements SingletonInterface, LoggerAwareIn
         } catch (CloudFrontException $exception) {
             // @extensionScannerIgnoreLine
             $this->logger?->error(sprintf('%s:%s', $exception->getAwsErrorCode(), $exception->getAwsErrorMessage()));
+        } catch (InvalidInvalidationPathException $exception) {
+            $this->logger?->warning($exception->getMessage());
         }
     }
 }
