@@ -12,12 +12,17 @@
 namespace Leuchtfeuer\AwsTools\Domain\Repository;
 
 use Aws\CloudFront\CloudFrontClient;
+use Aws\CloudFront\Exception\CloudFrontException;
 use Leuchtfeuer\AwsTools\Constants;
-use TYPO3\CMS\Core\Http\Uri;
+use Leuchtfeuer\AwsTools\Exception\InvalidInvalidationPathException;
+use Leuchtfeuer\AwsTools\Service\InvalidationPathNormalizer;
 
 readonly class CloudFrontRepository
 {
-    public function __construct(private CloudFrontClient $cloudFrontClient) {}
+    public function __construct(
+        private CloudFrontClient $cloudFrontClient,
+        private InvalidationPathNormalizer $pathNormalizer,
+    ) {}
 
     /**
      * This will list the past X ($maxItems) invalidation items for the given distribution ($distributionId).
@@ -42,6 +47,9 @@ readonly class CloudFrontRepository
      * @param string|string[] $items Array of file paths to be invalidated (or a single path)
      *
      * @return array<string, mixed> The response of the webservice
+     *
+     * @throws InvalidInvalidationPathException
+     * @throws CloudFrontException
      */
     public function createInvalidation(string $distribution, $items): array
     {
@@ -49,10 +57,7 @@ readonly class CloudFrontRepository
             $items = [$items];
         }
 
-        array_walk($items, function (&$item): void {
-            $item = '/' . ltrim((new Uri($item))->getPath(), '/');
-            $item = trim($item);
-        });
+        $items = array_map($this->pathNormalizer->normalize(...), $items);
 
         return $this->cloudFrontClient->createInvalidation([
             'DistributionId' => htmlentities($distribution),
@@ -73,6 +78,9 @@ readonly class CloudFrontRepository
      * @param string|string[] $items Array of file paths to be invalidated (or a single path)
      *
      * @return array<string, array<string, mixed>> An array of responses of the webservice
+     *
+     * @throws InvalidInvalidationPathException
+     * @throws CloudFrontException
      */
     public function createBatchInvalidation(array $distributions, $items): array
     {
