@@ -24,6 +24,9 @@
             <trans-unit id="messages.invalid_resource_path.title">
                 <source>Invalidate file path</source>
             </trans-unit>
+            <trans-unit id="messages.unsupported_resource_path.body">
+                <source>The path "%s" cannot be invalidated. Amazon CloudFront does not support the character "~" in invalidation paths.</source>
+            </trans-unit>
             <trans-unit id="content.invalidation_id">
                 <source>Invalidation ID</source>
             </trans-unit>

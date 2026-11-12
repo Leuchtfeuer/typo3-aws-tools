@@ -16,6 +16,8 @@ namespace Leuchtfeuer\AwsTools\Command;
 use Aws\CloudFront\Exception\CloudFrontException;
 use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
+use Leuchtfeuer\AwsTools\Exception\InvalidInvalidationPathException;
+use Leuchtfeuer\AwsTools\Service\InvalidationPathNormalizer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +31,7 @@ class InvalidationCommand extends Command
     public function __construct(
         private readonly CloudFrontRepository $cloudFrontRepository,
         private readonly ExtensionConfiguration $extensionConfiguration,
+        private readonly InvalidationPathNormalizer $pathNormalizer,
     ) {
         parent::__construct();
     }
@@ -48,7 +51,13 @@ class InvalidationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $paths = $input->getArgument('paths');
+        try {
+            $paths = array_map($this->pathNormalizer->normalize(...), (array)$input->getArgument('paths'));
+        } catch (InvalidInvalidationPathException $exception) {
+            $this->io->error($exception->getMessage());
+
+            return Command::FAILURE;
+        }
 
         foreach ($this->extensionConfiguration->getCloudFrontDistributions() as $distribution) {
             try {
