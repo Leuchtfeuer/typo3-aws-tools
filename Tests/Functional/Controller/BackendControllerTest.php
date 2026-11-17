@@ -42,6 +42,18 @@ final class BackendControllerTest extends AwsToolsFunctionalTestCase
     }
 
     /**
+     * CloudFront treats "/folder/" as a single object; only "/folder/*" covers the files inside.
+     */
+    #[Test]
+    public function invalidatingFolderFromFileListCoversAllFilesInIt(): void
+    {
+        $response = $this->invalidateFromFileList('Folder', '/' . FileNameCases::FOLDER . '/');
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(['/fileadmin/' . FileNameCases::FOLDER . '/*'], $this->sentInvalidationPaths());
+    }
+
+    /**
      * Sends the request body CloudFrontInvalidationModule.js builds from the action button's data attributes.
      */
     private function invalidateFromFileList(string $type, string $identifier): ResponseInterface
