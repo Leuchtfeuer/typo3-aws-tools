@@ -46,6 +46,7 @@ readonly class BackendController implements SingletonInterface
 
         if ($item !== null && $this->isPermitted($item, $data['type']) && $identifier = $item->getPublicUrl()) {
             try {
+                $identifier .= $item instanceof Folder ? '*' : '';
                 $distributions = $this->extensionConfiguration->getCloudFrontDistributions();
                 $this->cloudFrontRepository->createBatchInvalidation($distributions, $identifier);
 
