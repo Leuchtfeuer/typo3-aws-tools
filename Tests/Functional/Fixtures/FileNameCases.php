@@ -30,11 +30,11 @@ final class FileNameCases
     {
         yield 'plain' => ['kontrolle.txt', '/fileadmin/cf-test/kontrolle.txt'];
         yield 'at sign, measured on CloudFront' => ['at@test.txt', '/fileadmin/cf-test/at%40test.txt'];
-        yield 'umlaut' => ['Über.pdf', '/fileadmin/cf-test/%C3%9Cber.pdf'];
-        yield 'space' => ['a b.pdf', '/fileadmin/cf-test/a%20b.pdf'];
-        yield 'parentheses' => ['a(1).pdf', '/fileadmin/cf-test/a%281%29.pdf'];
-        yield 'plus' => ['a+b.pdf', '/fileadmin/cf-test/a%2Bb.pdf'];
-        yield 'percent' => ['100%.pdf', '/fileadmin/cf-test/100%25.pdf'];
+        yield 'umlaut' => ['Über.txt', '/fileadmin/cf-test/%C3%9Cber.txt'];
+        yield 'space' => ['a b.txt', '/fileadmin/cf-test/a%20b.txt'];
+        yield 'parentheses' => ['a(1).txt', '/fileadmin/cf-test/a%281%29.txt'];
+        yield 'plus' => ['a+b.txt', '/fileadmin/cf-test/a%2Bb.txt'];
+        yield 'percent' => ['100%.txt', '/fileadmin/cf-test/100%25.txt'];
     }
 
     /**
