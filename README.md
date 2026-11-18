@@ -64,6 +64,11 @@ config.tx_awstools {
             search = "/typo3conf/
             replace = "%s/typo3conf/
         }
+
+        30 {
+            search = "/_assets/
+            replace = "%s/_assets/
+        }
     }
 
     replacer {
