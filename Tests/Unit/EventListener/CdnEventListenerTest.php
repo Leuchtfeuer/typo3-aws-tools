@@ -80,29 +80,29 @@ final class CdnEventListenerTest extends UnitTestCase
 
     private function createSubject(): CdnEventListener
     {
-        $onlineMediaHelperRegistry = $this->createStub(OnlineMediaHelperRegistry::class);
+        $onlineMediaHelperRegistry = self::createStub(OnlineMediaHelperRegistry::class);
         $onlineMediaHelperRegistry->method('getOnlineMediaHelper')->willReturn(false);
 
         return new CdnEventListener(
-            new CdnConfiguration($this->createStub(ConfigurationManagerInterface::class)),
+            new CdnConfiguration(self::createStub(ConfigurationManagerInterface::class)),
             $onlineMediaHelperRegistry
         );
     }
 
     private function createEvent(string $driverUrl): GeneratePublicUrlForResourceEvent
     {
-        $file = $this->createStub(File::class);
+        $file = self::createStub(File::class);
         $file->method('getIdentifier')->willReturn('/user_upload/a.jpg');
 
-        $driver = $this->createStub(LocalDriver::class);
+        $driver = self::createStub(LocalDriver::class);
         $driver->method('getPublicUrl')->willReturn($driverUrl);
 
-        return new GeneratePublicUrlForResourceEvent($file, $this->createStub(ResourceStorage::class), $driver);
+        return new GeneratePublicUrlForResourceEvent($file, self::createStub(ResourceStorage::class), $driver);
     }
 
     private function createFrontendRequest(string $host): ServerRequest
     {
-        $siteLanguage = $this->createStub(SiteLanguage::class);
+        $siteLanguage = self::createStub(SiteLanguage::class);
         $siteLanguage->method('toArray')->willReturn([
             'awstools_cdn_enabled' => '1',
             'awstools_cdn_host' => $host,
