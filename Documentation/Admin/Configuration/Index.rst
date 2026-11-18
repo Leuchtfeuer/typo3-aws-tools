@@ -58,6 +58,11 @@ extension) configured in the TypoScript setup are rewritten by a regular express
                search = "/typo3conf/
                replace = "%s/typo3conf/
            }
+
+           30 {
+               search = "/_assets/
+               replace = "%s/_assets/
+           }
        }
 
        replacer {
