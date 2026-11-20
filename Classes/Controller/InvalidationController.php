@@ -15,6 +15,8 @@ use Aws\Exception\AwsException;
 use Leuchtfeuer\AwsTools\Constants;
 use Leuchtfeuer\AwsTools\Domain\Repository\CloudFrontRepository;
 use Leuchtfeuer\AwsTools\Domain\Transfer\ExtensionConfiguration;
+use Leuchtfeuer\AwsTools\Exception\InvalidInvalidationPathException;
+use Leuchtfeuer\AwsTools\Service\InvalidationPathNormalizer;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -30,7 +32,8 @@ class InvalidationController extends ActionController
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
         private readonly CloudFrontRepository $cloudFrontRepository,
-        private readonly ModuleTemplateFactory $moduleTemplateFactory
+        private readonly ModuleTemplateFactory $moduleTemplateFactory,
+        private readonly InvalidationPathNormalizer $pathNormalizer
     ) {
         $this->distributions = $extensionConfiguration->getCloudFrontDistributions();
     }
@@ -93,7 +96,15 @@ class InvalidationController extends ActionController
 
         foreach (GeneralUtility::trimExplode(LF, $paths, true) as $path) {
             if (!str_contains($path, ' ')) {
-                $resourcePaths[] = $path;
+                try {
+                    $resourcePaths[] = $this->pathNormalizer->normalize($path);
+                } catch (InvalidInvalidationPathException $exception) {
+                    $this->addFlashMessage(
+                        LocalizationUtility::translate('messages.unsupported_resource_path.body', Constants::EXTENSION_NAME, [$exception->getPath()]) ?? '',
+                        LocalizationUtility::translate('messages.invalid_resource_path.title', Constants::EXTENSION_NAME) ?? '',
+                        ContextualFeedbackSeverity::WARNING
+                    );
+                }
             } else {
                 $this->addFlashMessage(
                     LocalizationUtility::translate('messages.invalid_resource_path.body', Constants::EXTENSION_NAME, [$path]) ?? '',
