@@ -55,7 +55,7 @@ class CdnEventListener implements SingletonInterface
             }
             // @extensionScannerIgnoreLine
             $publicUrl = $driver->getPublicUrl($identifier);
-            $event->setPublicUrl($this->host . $publicUrl);
+            $event->setPublicUrl($this->host . '/' . ltrim((string)$publicUrl, '/'));
         }
     }
 
