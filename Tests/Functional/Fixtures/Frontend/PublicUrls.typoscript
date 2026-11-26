@@ -1,0 +1,12 @@
+config.disableAllHeaderCode = 1
+
+page = PAGE
+page.10 = FILES
+page.10 {
+    folders = 1:/cf-test/
+    renderObj = TEXT
+    renderObj {
+        data = file:current:publicUrl
+        wrap = <li>|</li>
+    }
+}

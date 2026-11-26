@@ -1,0 +1,7 @@
+config.disableAllHeaderCode = 1
+
+# The functional test instance runs in classic mode (typo3conf/ext/), so the
+# Composer mode output for extension resources (public/_assets/) is given literally.
+page = PAGE
+page.10 = TEXT
+page.10.value = <script src="/_assets/0123456789abcdef/JavaScript/app.js?1700000000"></script>
