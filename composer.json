@@ -48,7 +48,12 @@
     "extra": {
         "typo3/cms": {
             "extension-key": "aws_tools",
-            "version": "14.0.1"
+            "version": "14.0.1",
+            "Package": {
+                "providesPackages": {
+                    "aws/aws-sdk-php": "Libraries/vendor"
+                }
+            }
         }
     }
 }
