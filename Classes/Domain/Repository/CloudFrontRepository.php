@@ -36,7 +36,7 @@ readonly class CloudFrontRepository
     {
         return $this->cloudFrontClient->listInvalidations([
             'DistributionId' => htmlentities($distribution),
-            'MaxItems' => $maxItems,
+            'MaxItems' => (string)$maxItems,
         ])->toArray();
     }
 
@@ -57,7 +57,7 @@ readonly class CloudFrontRepository
             $items = [$items];
         }
 
-        $items = array_map($this->pathNormalizer->normalize(...), $items);
+        $items = array_values(array_map($this->pathNormalizer->normalize(...), $items));
 
         return $this->cloudFrontClient->createInvalidation([
             'DistributionId' => htmlentities($distribution),
