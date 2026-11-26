@@ -1,0 +1,60 @@
+.. include:: ../../Includes.txt
+
+===========================
+Version 14.0.2 - 2026/11/30
+===========================
+
+* Fix missing slash between CDN host and file path in rewritten file URLs
+* Fix ``aws:cf:invalidate`` failing with an ``ArgumentCountError``
+* Keep query strings and wildcards in CloudFront invalidation paths
+* Invalidate the contents of a folder from the file list, not only the folder object
+* Fix invalidation from the file list for storages with an absolute public URL
+* Report invalidation paths CloudFront cannot handle instead of failing with an exception
+* Rewrite extension resources under ``/_assets/`` (Composer mode) to the CDN
+* Load the bundled AWS SDK in classic mode through ``providesPackages``
+* Bundle only libraries TYPO3 does not ship and update the AWS SDK to 3.408.0
+  (fixes CVE-2026-54133 in the bundled ``mtdowling/jmespath.php``)
+
+.. attention::
+
+   * ``CloudFrontRepository::__construct()`` now requires a second argument of type
+     ``InvalidationPathNormalizer``. Code that gets the repository through dependency
+     injection is not affected.
+   * Invalidation paths containing ``~`` or ``%7E`` are rejected, because CloudFront does not
+     support them. The backend module, the CLI command and the file list report such paths.
+   * The content replacement has a new default pattern ``30`` for ``"/_assets/``. A pattern
+     ``30`` of your own overrides it and should move to another key. Installations that copied
+     the default patterns instead of using the extension's TypoScript have to add it themselves.
+   * Composer installations now require ``aws/aws-sdk-php`` 3.389 or later.
+
+Download
+========
+
+Download this version from the `TYPO3 extension repository <https://extensions.typo3.org/extension/aws_tools/>`__ or from
+`GitHub <https://github.com/Leuchtfeuer/typo3-aws-tools/releases/tag/v14.0.2>`__.
+
+All Changes
+===========
+
+This is a list of all changes in this release::
+
+    2026-11-26 [SECURITY] Update aws-sdk-php to 3.408.0 [TER-528] [TER-531] (Commit d1f973e by Oliver Heins)
+    2026-11-26 [BUGFIX] Leave libraries shipped by TYPO3 to the core [TER-528] [TER-531] (Commit 378883b by Oliver Heins)
+    2026-11-26 [TASK] Load bundled libraries through providesPackages [TER-528] [TER-531] (Commit 68bc874 by Oliver Heins)
+    2026-11-18 [BUGFIX] Rewrite extension resources under /_assets/ to the CDN [TER-534] (Commit 99306e5 by Oliver Heins)
+    2026-11-18 [TASK] Call PHPUnit stub factory statically in CdnEventListenerTest [TER-528] (Commit d920603 by Oliver Heins)
+    2026-11-17 [TASK] Cover folder invalidation from the file list [TER-534] (Commit f97f67b by Oliver Heins)
+    2026-11-17 [BUGFIX] Invalidate folder contents from the file list [TER-528] [TER-530] (Commit 3900c37 by Oliver Heins)
+    2026-11-17 [TASK] Cover invalidation paths of CLI and backend module [TER-534] (Commit f565edf by Oliver Heins)
+    2026-11-17 [TASK] Cover invalidation paths of the file list action [TER-534] (Commit 80f98ed by Oliver Heins)
+    2026-11-17 [TASK] Cover invalidation paths of file operations [TER-534] (Commit 15a82d7 by Oliver Heins)
+    2026-11-17 [TASK] Add functional test for CDN file URLs [TER-534] (Commit 9c5f7ba by Oliver Heins)
+    2026-11-12 [TASK] Remove tests that only verify mock interactions [TER-528] [TER-529] [TER-530] (Commit 4d324a6 by Oliver Heins)
+    2026-11-12 [BUGFIX] Require the path normalizer in the CloudFrontRepository [TER-528] [TER-530] (Commit 17bdadd by Oliver Heins)
+    2026-11-12 [BUGFIX] Keep the CloudFrontRepository constructor compatible [TER-528] [TER-530] (Commit ad944e0 by Oliver Heins)
+    2026-11-12 [BUGFIX] Reject encoded tildes and fragment-only paths [TER-528] [TER-530] (Commit a46fdff by Oliver Heins)
+    2026-11-12 [BUGFIX] Pass full public URLs unchanged from the file list action [TER-528] [TER-530] (Commit 6dd3749 by Oliver Heins)
+    2026-11-12 [BUGFIX] Report paths CloudFront cannot invalidate [TER-528] [TER-530] (Commit 888defa by Oliver Heins)
+    2026-11-12 [BUGFIX] Keep query string and wildcard in invalidation paths [TER-528] [TER-530] (Commit fa5ce27 by Oliver Heins)
+    2026-11-12 [BUGFIX] Inject dependencies into the invalidation command [TER-528] [TER-529] (Commit cc957f5 by Oliver Heins)
+    2026-10-20 [BUGFIX] Keep slash between CDN host and file path (Commit aa55ea7 by Niklas Grieger)

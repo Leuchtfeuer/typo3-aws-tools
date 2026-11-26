@@ -6,6 +6,19 @@
     "classmap-authoritative": true
   },
   "require": {
-    "aws/aws-sdk-php": "^3.368"
+    "aws/aws-sdk-php": "^3.389"
+  },
+  "replace": {
+    "guzzlehttp/guzzle": "*",
+    "guzzlehttp/promises": "*",
+    "guzzlehttp/psr7": "*",
+    "psr/http-client": "*",
+    "psr/http-factory": "*",
+    "psr/http-message": "*",
+    "ralouphie/getallheaders": "*",
+    "symfony/deprecation-contracts": "*",
+    "symfony/filesystem": "*",
+    "symfony/polyfill-ctype": "*",
+    "symfony/polyfill-mbstring": "*"
   }
 }
